@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum MaritalState {
+  SINGLE
+  MARRIED
+  DIVORCED
+  WINDOWED
+  SEPARATED
+  IN_CIVIL_UNION
+}
+
+model User {
+  id           String       @id @unique @default(uuid())
+  name         String
+  email        String       @unique
+  password     String
+  celphone     String
+  city         String
+  state        String
+  bornedAt     String       @map("borned_at")
+  maritalState MaritalState @map("marital_state")
+  receiveNews  Boolean      @default(true) @map("receive_news")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime?    @updatedAt @map("update_at")
+  deletedAt    DateTime?    @map("delete_at")
+
+  preferences  Preference[]
+  appointments Appointment[]
+
+  @@map("users")
+}
+
+model Preference {
+  id         String    @id @unique @default(uuid())
+  preference String
+  createdAt  DateTime  @default(now()) @map("created_at")
+  deletedAt  DateTime? @map("delete_at")
+
+  users   User[]
+  doctors Doctor[]
+
+  @@map("preferences")
+}
+
+enum ServicePreference {
+  ONLINE
+  PRESENCIAL
+  ALL
+}
+
+model Doctor {
+  id                String            @id @unique @default(uuid())
+  name              String
+  unervisity        String
+  bornedAt          DateTime          @map("borned_at")
+  servicePreference ServicePreference @default(ALL) @map("service_preference")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("update_at")
+
+  preferences Preference[]
+
+  sessions     SessionToDoctor[]
+  appointments Appointment[]
+
+  @@map("doctors")
+}
+
+model SessionToDoctor {
+  id           String    @id @unique @default(uuid())
+  googleUserId String
+  token        String
+  expiredAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  doctorId String @map("session_to_doctor_doctor_id")
+
+  @@map("sessions_to_doctors")
+}
+
+model Appointment {
+  id String @id @unique @default(uuid())
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  aprovedAt   DateTime? @map("aproved_at")
+  scheduledAt DateTime  @map("scheduled_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  doctorId String @map("doctor_id")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
+
+  @@map("appointments")
+}
