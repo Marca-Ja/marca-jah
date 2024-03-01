@@ -1,0 +1,43 @@
+version: "3.8"
+
+networks:
+  default:
+    driver: bridge
+
+services: 
+  mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    restart: always
+    networks:
+      - default
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: marcaja
+      MYSQL_USER: user
+      MYSQL_PASSWORD: docker
+    volumes:
+      - ./data:/var/lib/
+
+  api:
+    build: .
+    ports:
+      - 3000:3000
+    command: npm run start:dev
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - default
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  data:
+
