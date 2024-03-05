@@ -4,7 +4,7 @@ networks:
   default:
     driver: bridge
 
-services: 
+services:
   mysql:
     image: mysql
     ports:
@@ -24,7 +24,7 @@ services:
     build: .
     ports:
       - 3000:3000
-    command: npm run start:dev
+    command: npx prisma generate && npm run start:dev
     restart: always
     env_file:
       - .env
@@ -40,4 +40,5 @@ services:
 
 volumes:
   data:
+
 
