@@ -25,11 +25,15 @@ enum MaritalState {
 model User {
   id           String       @id @unique @default(uuid())
   name         String
+  socialName   String
+  lastName     String
   email        String       @unique
   password     String
   celphone     String
+  postalCode   String
   city         String
   state        String
+  street       String
   bornedAt     String       @map("borned_at")
   maritalState MaritalState @map("marital_state")
   receiveNews  Boolean      @default(true) @map("receive_news")
