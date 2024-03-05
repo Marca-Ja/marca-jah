@@ -29,7 +29,7 @@ model User {
   lastName     String
   email        String       @unique
   password     String
-  celphone     String
+  cellphone    String
   postalCode   String
   city         String
   state        String
