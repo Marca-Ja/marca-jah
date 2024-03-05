@@ -1,5 +1,11 @@
 import { MaritalState } from '@prisma/client';
-import { IsEmail, IsOptional, IsString, MinLength } from 'class-validator';
+import {
+  IsEmail,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDTO {
   @IsString()
@@ -24,7 +30,13 @@ export class CreateUserDTO {
   @IsEmail()
   email: string;
 
-  @IsString()
+  @IsStrongPassword({
+    minLength: 6,
+    minUppercase: 1,
+    minLowercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
   password: string;
 
   @IsOptional()
