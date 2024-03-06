@@ -23,23 +23,23 @@ enum MaritalState {
 }
 
 model User {
-  id           String       @id @unique @default(uuid())
+  id           String        @id @unique @default(uuid())
   name         String
-  socialName   String
+  socialName   String?
   lastName     String
-  email        String       @unique
+  email        String        @unique
   password     String
-  cellphone    String
-  postalCode   String
-  city         String
-  state        String
-  street       String
-  bornedAt     String       @map("borned_at")
-  maritalState MaritalState @map("marital_state")
-  receiveNews  Boolean      @default(true) @map("receive_news")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime?    @updatedAt @map("update_at")
-  deletedAt    DateTime?    @map("delete_at")
+  cellphone    String?
+  postalCode   String?
+  city         String?
+  state        String?
+  street       String?
+  bornedAt     String?       @map("borned_at")
+  maritalState MaritalState? @map("marital_state")
+  receiveNews  Boolean?      @default(true) @map("receive_news")
+  createdAt    DateTime?     @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("update_at")
+  deletedAt    DateTime?     @map("delete_at")
 
   preferences  Preference[]
   appointments Appointment[]
