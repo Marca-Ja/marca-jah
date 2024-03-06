@@ -13,6 +13,8 @@ export class CreateUserDTO {
   name: string;
 
   @IsOptional()
+  @IsString()
+  @MinLength(3)
   socialName: string;
 
   @IsString()
@@ -21,10 +23,8 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  @IsOptional()
   bornedAt: string;
 
-  @IsOptional()
   cellphone: string;
 
   @IsEmail()
@@ -39,23 +39,17 @@ export class CreateUserDTO {
   })
   password: string;
 
-  @IsOptional()
   postalCode: string;
 
-  @IsOptional()
   city: string;
 
-  @IsOptional()
   state: string;
 
-  @IsOptional()
   street: string;
 
-  @IsOptional()
   maritalState: MaritalState;
 
-  //   medical_interest: string[];
-
-  @IsOptional()
   receiveNews: boolean;
+
+  // medical_interest: string[];
 }
