@@ -14,7 +14,7 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsString()
-  @MinLength(3)
+  // @MinLength(3)
   socialName: string;
 
   @IsString()
