@@ -24,6 +24,7 @@ Content-Type: application/json
    "receiveNews": true
 }
 
+
 ### GET auth Google
 GET {{apiurl}}/auth HTTP/1.1
 
