@@ -13,7 +13,7 @@ Content-Type: application/json
    "socialName":"",
    "lastName":"Ramakrishna",
    "bornedAt":"1985-09-16",
-   "email":"dai@gmail.com",
+   "email":"dai3@gmail.com",
    "cellphone": "",
    "password":"12345%TTVHAa",
    "postalCode": "97770-000",
@@ -24,8 +24,8 @@ Content-Type: application/json
    "receiveNews": true
 }
 
-### GET auth
+### GET auth Google
 GET {{apiurl}}/auth HTTP/1.1
 
-### GET doctor
+### GET doctor Google
 GET {{apiurl}}/auth/google-redirect HTTP/1.1

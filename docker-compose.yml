@@ -24,10 +24,11 @@ services:
     build: .
     ports:
       - 3000:3000
-    command: npx prisma generate && npm run start:dev
+    command: npm run dev
     restart: always
     env_file:
       - .env
+      - .env-docker
     networks:
       - default
     depends_on:
@@ -36,7 +37,6 @@ services:
       - mysql
     volumes:
       - .:/app
-      - /app/node_modules
 
 volumes:
   data:
