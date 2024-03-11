@@ -4,7 +4,7 @@ import { CreateUserDTO } from './DTO/create-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(data: CreateUserDTO) {
     await this.validateUser(data);
@@ -18,12 +18,14 @@ export class UserService {
 
   async validateUser(data: any) {
     console.log(data);
-    try {
-      await this.prisma.user.findFirst({
-        where: { NOT: data.email },
-      });
-    } catch (error) {
+
+    const user = await this.prisma.user.findFirst({
+      where: { email: data.email },
+    });
+    if (user) {
       throw new UnauthorizedException('Email já cadastrado');
     }
+
+    return true;
   }
 }

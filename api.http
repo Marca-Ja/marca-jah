@@ -1,0 +1,31 @@
+### Variables 
+@apiurl = http://localhost:3000
+
+### GET users
+GET {{apiurl}}/user HTTP/1.1
+
+### POST users
+POST {{apiurl}}/user HTTP/1.1
+Content-Type: application/json
+
+{
+   "name":"Tenali",
+   "socialName":"",
+   "lastName":"Ramakrishna",
+   "bornedAt":"1985-09-16",
+   "email":"dai@gmail.com",
+   "cellphone": "",
+   "password":"12345%TTVHAa",
+   "postalCode": "97770-000",
+   "city": "Santa Maria",
+   "state": "RS",
+   "street": "Redencio Frizzo",
+   "maritalState":"SINGLE",
+   "receiveNews": true
+}
+
+### GET auth
+GET {{apiurl}}/auth HTTP/1.1
+
+### GET doctor
+GET {{apiurl}}/auth/google-redirect HTTP/1.1
