@@ -11,6 +11,7 @@ import {
 import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { error } from 'console';
 
 @Controller('doctor')
 export class DoctorController {
@@ -24,7 +25,11 @@ export class DoctorController {
 
   @Get()
   findAll() {
-    return this.doctorService.findAll();
+    try {
+      return this.doctorService.findAll();
+    } catch (e) {
+      throw new error(e.message);
+    }
   }
 
   @Get(':id')
