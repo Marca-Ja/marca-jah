@@ -17,8 +17,6 @@ export class UserService {
   }
 
   async validateUser(data: any) {
-    console.log(data);
-
     const user = await this.prisma.user.findFirst({
       where: { email: data.email },
     });
