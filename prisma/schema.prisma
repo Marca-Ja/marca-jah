@@ -67,8 +67,10 @@ enum ServicePreference {
 
 model Doctor {
   id                String            @id @unique @default(uuid())
-  name              String
-  unervisity        String
+  email             String            @unique
+  fistName          String
+  lastName          String
+  university        String
   bornedAt          DateTime          @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
   createdAt         DateTime          @default(now()) @map("created_at")
@@ -76,7 +78,6 @@ model Doctor {
 
   preferences Preference[]
 
-  sessions     SessionToDoctor[]
   appointments Appointment[]
 
   @@map("doctors")
@@ -84,13 +85,12 @@ model Doctor {
 
 model SessionToDoctor {
   id           String    @id @unique @default(uuid())
-  googleUserId String
-  token        String
-  expiredAt    DateTime?
+  email        String    @unique
+  firstName    String
+  lastName     String
+  accessToken  String    @db.VarChar(255)
+  refreshToken String
   createdAt    DateTime  @default(now())
-
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  doctorId String @map("session_to_doctor_doctor_id")
 
   @@map("sessions_to_doctors")
 }
