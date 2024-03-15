@@ -94,19 +94,22 @@ export class UserService {
   }
 
   async validateUser(data: any) {
-    const userEmail = await this.prisma.user.findFirst({
-      where: { email: data.email },
-    });
-    if (userEmail) {
-      throw new UnauthorizedException('Email já cadastrado');
+    if (data == data.email) {
+      const userEmail = await this.prisma.user.findFirst({
+        where: { email: data.email },
+      });
+      if (userEmail) {
+        throw new UnauthorizedException('Email já cadastrado');
+      }
     }
+    if (data == data.id) {
+      const userId = await this.prisma.user.findFirst({
+        where: { id: data.id },
+      });
 
-    const userId = await this.prisma.user.findFirst({
-      where: { id: data.id },
-    });
-
-    if (!userId) {
-      throw new NotFoundException('User not found');
+      if (!userId) {
+        throw new NotFoundException('User not found');
+      }
     }
 
     return true;
