@@ -81,19 +81,25 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    const user = await this.prismaService.user.findFirst({
-      where: {
-        email,
-      },
-    });
-    if (!user) {
-      throw new UnauthorizedException('E-mail ou senha inválido(s)');
-    }
+    try {
+      const user = await this.prismaService.user.findFirst({
+        where: {
+          email,
+        },
+      });
 
-    if (!(await bcrypt.compare(password, user.password))) {
-      throw new UnauthorizedException('E-mail ou senha inválido(s)');
-    }
+      if (user) {
+        return this.createToken(user);
+      }
 
-    return this.createToken(user);
+      if (!(await bcrypt.compare(password, user.password))) {
+        throw new UnauthorizedException('E-mail ou senha inválido(s)');
+      }
+
+      throw new UnauthorizedException('E-mail ou senha inválido(s)');
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      throw error;
+    }
   }
 }
