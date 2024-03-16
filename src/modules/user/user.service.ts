@@ -39,9 +39,7 @@ export class UserService {
   async update(id: string, data: UpdatePutUserDTO) {
     await this.validateUser(id);
 
-    const hash = await bcrypt.hash(data.password, 8);
-
-    data.password = hash;
+    data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
     return this.prisma.user.update({
       where: { id },
@@ -65,6 +63,7 @@ export class UserService {
       street,
       maritalState,
       receiveNews,
+      role,
     }: UpdatePatchUserDTO,
   ) {
     await this.validateUser(id);
@@ -85,6 +84,7 @@ export class UserService {
       street,
       maritalState,
       receiveNews,
+      role,
     })) {
       if (value) {
         if (key === 'password' && typeof value === 'string') {
