@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
   Put,
 } from '@nestjs/common';
 
@@ -13,7 +14,13 @@ import { DoctorService } from './doctor.service';
 import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { error } from 'console';
+import { RoleGuard } from '../../guards/role.guard';
+import { AuthGuard } from '../../guards/auth.guard';
+import { Role } from '../../enum/role.enum';
+import { Roles } from '../../decorators/roles.decorator';
 
+@Roles(Role.Doctor)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
