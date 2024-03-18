@@ -10,9 +10,11 @@ import {
 import { APP_GUARD } from '@nestjs/core';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     UserModule,
     ThrottlerModule.forRoot([
       {

@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -37,6 +38,7 @@ model User {
   bornedAt     String?       @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
+  role         String        @default("User")
   createdAt    DateTime?     @default(now()) @map("created_at")
   updatedAt    DateTime?     @updatedAt @map("update_at")
   deletedAt    DateTime?     @map("delete_at")
@@ -73,6 +75,7 @@ model Doctor {
   university        String
   bornedAt          DateTime          @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
+  role              String            @default("Doctor")
   createdAt         DateTime          @default(now()) @map("created_at")
   updatedAt         DateTime          @updatedAt @map("update_at")
 
@@ -84,13 +87,13 @@ model Doctor {
 }
 
 model SessionToDoctor {
-  id           String    @id @unique @default(uuid())
-  email        String    @unique
+  id           String   @id @unique @default(uuid())
+  email        String   @unique
   firstName    String
   lastName     String
-  accessToken  String    @db.VarChar(255)
+  accessToken  String   @db.VarChar(255)
   refreshToken String
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime @default(now())
 
   @@map("sessions_to_doctors")
 }
