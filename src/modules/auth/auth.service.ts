@@ -15,7 +15,7 @@ export class AuthService {
   private audience = 'users';
 
   constructor(
-    private readonly JwtService: JwtService,
+    private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
   ) {}
 
@@ -53,7 +53,7 @@ export class AuthService {
 
   createToken(user: User) {
     return {
-      accessToken: this.JwtService.sign(
+      accessToken: this.jwtService.sign(
         {
           name: user.name,
           email: user.email,
@@ -69,14 +69,14 @@ export class AuthService {
   }
   verifyToken(token: string) {
     try {
-      const data = this.JwtService.verify(token, {
+      const data = this.jwtService.verify(token, {
         issuer: this.issuer,
         audience: this.audience,
       });
 
       return data;
     } catch (error) {
-      throw new BadRequestException(error);
+      throw new UnauthorizedException('Token inválido');
     }
   }
 
@@ -87,7 +87,6 @@ export class AuthService {
           email,
         },
       });
-
       if (user) {
         return this.createToken(user);
       }
@@ -98,8 +97,7 @@ export class AuthService {
 
       throw new UnauthorizedException('E-mail ou senha inválido(s)');
     } catch (error) {
-      console.error('Error fetching user:', error);
-      throw error;
+      throw new BadRequestException(error.message);
     }
   }
 }
