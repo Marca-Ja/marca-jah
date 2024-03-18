@@ -1,9 +1,24 @@
-import { Body, Controller, Get, Post, Put, Patch, Param } from '@nestjs/common';
-import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
 import { CreateUserDTO } from './DTO/create-user.dto';
-import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
+import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
+import { UserService } from './user.service';
 
+@Roles(Role.User)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userservice: UserService) {}
@@ -24,7 +39,10 @@ export class UserController {
   }
 
   @Patch(':id')
-  async updatePartial(@Body() data: UpdatePatchUserDTO, @Param('id') id: string) {
+  async updatePartial(
+    @Body() data: UpdatePatchUserDTO,
+    @Param('id') id: string,
+  ) {
     return this.userservice.updatePartial(id, data);
   }
 

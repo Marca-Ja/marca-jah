@@ -8,6 +8,7 @@ import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import * as bcrypt from 'bcrypt';
+import { isEmail, isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -16,9 +17,7 @@ export class UserService {
   async create(data: CreateUserDTO) {
     await this.validateUser(data);
 
-    const hash = await bcrypt.hash(data.password, 8);
-
-    data.password = hash;
+    data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
     return this.prisma.user.create({ data });
   }
@@ -27,12 +26,20 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
+  async listUser(id: string) {
+    await this.validateUser(id);
+
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async update(id: string, data: UpdatePutUserDTO) {
     await this.validateUser(id);
 
-    const hash = await bcrypt.hash(data.password, 8);
-
-    data.password = hash;
+    data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
     return this.prisma.user.update({
       where: { id },
@@ -56,6 +63,7 @@ export class UserService {
       street,
       maritalState,
       receiveNews,
+      role,
     }: UpdatePatchUserDTO,
   ) {
     await this.validateUser(id);
@@ -76,6 +84,7 @@ export class UserService {
       street,
       maritalState,
       receiveNews,
+      role,
     })) {
       if (value) {
         if (key === 'password' && typeof value === 'string') {
@@ -94,11 +103,23 @@ export class UserService {
   }
 
   async validateUser(data: any) {
-    const userEmail = await this.prisma.user.findFirst({
-      where: { email: data.email },
-    });
-    if (userEmail) {
-      throw new UnauthorizedException('Email já cadastrado');
+    if (data === isUUID) {
+      const userId = await this.prisma.user.findFirst({
+        where: { id: data.id },
+      });
+
+      if (!userId) {
+        throw new NotFoundException('User not found');
+      }
+    }
+
+    if (data === isEmail) {
+      const userEmail = await this.prisma.user.findFirst({
+        where: { email: data.email },
+      });
+      if (userEmail) {
+        throw new UnauthorizedException('Email já cadastrado');
+      }
     }
 
     const userId = await this.prisma.user.findFirst({
