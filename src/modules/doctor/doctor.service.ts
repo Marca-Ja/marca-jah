@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma.service';
-// import { CreateDoctorDto } from './dto/create-doctor.dto';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Injectable()
 export class DoctorService {
-  createUser(arg0: {
+  constructor(private readonly prisma: PrismaService) {}
+  async createUser(arg0: {
     email: any;
     firstName: any;
     lastName: any;
@@ -14,47 +14,29 @@ export class DoctorService {
   }) {
     throw new Error('Method not implemented.');
   }
-  constructor(private readonly prisma: PrismaService) {}
   // create(createDoctorDto: CreateDoctorDto) {
   //   return 'This action adds a new doctor';
   // }
 
-  findAll() {
-    return this.prisma.sessionToDoctor.findMany();
+  async findAll() {
+    return this.prisma.doctor.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} doctor`;
+  async findOne(id: string) {
+    return this.prisma.doctor.findFirst({ where: { id } });
   }
 
-  async update(
-    id: string,
-    {
-      bornedAt,
-      email,
-      fistName,
-      lastName,
-      university,
-      updatedAt,
-    }: UpdateDoctorDto,
-  ) {
+  async update(id: string, data: UpdateDoctorDto) {
     await this.exists(id);
 
     return this.prisma.doctor.update({
-      data: {
-        fistName,
-        lastName,
-        email,
-        university,
-        bornedAt,
-        updatedAt
-      },
+      data,
       where: { id },
     });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} doctor`;
+  async remove(id: string) {
+    return this.prisma.doctor.delete({ where: { id } });
   }
 
   async exists(id: string) {

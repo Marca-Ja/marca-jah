@@ -1,4 +1,12 @@
-import { IsDateString, IsEmail, IsString, MinLength } from 'class-validator';
+import { ServicePreference } from '@prisma/client';
+
+import {
+  IsDateString,
+  IsEmail,
+  IsString,
+  MinLength,
+  isEnum,
+} from 'class-validator';
 
 export class CreateDoctorDto {
   @IsString()
@@ -17,9 +25,8 @@ export class CreateDoctorDto {
   @IsDateString()
   bornedAt: string;
 
-  @IsString()
-  servicePreference: string;
-
   @IsDateString()
   updatedAt: string;
+
+  servicePreference: ServicePreference;
 }

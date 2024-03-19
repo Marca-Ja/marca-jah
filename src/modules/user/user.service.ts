@@ -7,7 +7,7 @@ import { PrismaService } from 'src/infra/prisma.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { isEmail, isUUID } from 'class-validator';
 
 @Injectable()
