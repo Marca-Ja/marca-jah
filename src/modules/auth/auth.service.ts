@@ -72,6 +72,7 @@ export class AuthService {
       const data = this.jwtService.verify(token, {
         issuer: this.issuer,
         audience: this.audience,
+        secret: process.env.JWT_SECRET,
       });
 
       return data;

@@ -1,14 +1,14 @@
 import {
   Injectable,
-  UnauthorizedException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { isEmail, isUUID } from 'class-validator';
 import { PrismaService } from 'src/infra/prisma.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
-import * as bcrypt from 'bcrypt';
-import { isEmail, isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -103,7 +103,7 @@ export class UserService {
   }
 
   async validateUser(data: any) {
-    if (data === isUUID) {
+    if (isUUID(data)) {
       const userId = await this.prisma.user.findFirst({
         where: { id: data.id },
       });
@@ -113,10 +113,11 @@ export class UserService {
       }
     }
 
-    if (data === isEmail) {
+    if (isEmail(data.email) && data.email.length > 0) {
       const userEmail = await this.prisma.user.findFirst({
         where: { email: data.email },
       });
+
       if (userEmail) {
         throw new UnauthorizedException('Email já cadastrado');
       }
