@@ -5,18 +5,6 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 @Injectable()
 export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
-  async createUser(arg0: {
-    email: any;
-    firstName: any;
-    lastName: any;
-    accessToken: any;
-    refreshToken: any;
-  }) {
-    throw new Error('Method not implemented.');
-  }
-  // create(createDoctorDto: CreateDoctorDto) {
-  //   return 'This action adds a new doctor';
-  // }
 
   async findAll() {
     return this.prisma.doctor.findMany();
