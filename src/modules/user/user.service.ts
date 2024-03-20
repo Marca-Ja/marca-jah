@@ -41,10 +41,16 @@ export class UserService {
 
     data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
-    return this.prisma.user.update({
-      where: { id },
-      data,
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
+      });
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 
   async updatePartial(
@@ -96,10 +102,16 @@ export class UserService {
       }
     }
 
-    return this.prisma.user.update({
-      where: { id },
-      data,
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
+      });
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 
   async validateUser(data: any) {

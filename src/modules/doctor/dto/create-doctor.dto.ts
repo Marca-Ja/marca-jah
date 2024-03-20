@@ -3,10 +3,12 @@ import { ServicePreference } from '@prisma/client';
 import {
   IsDateString,
   IsEmail,
+  IsEnum,
+  IsOptional,
   IsString,
   MinLength,
-  isEnum,
 } from 'class-validator';
+import { Role } from '../../../enum/role.enum';
 
 export class CreateDoctorDto {
   @IsString()
@@ -29,4 +31,8 @@ export class CreateDoctorDto {
   updatedAt: string;
 
   servicePreference: ServicePreference;
+
+  @IsOptional()
+  @IsEnum(Role)
+  enum: string;
 }
