@@ -38,7 +38,7 @@ export class CreateUserDTO {
   // @MaxDate(new Date(), {
   //   message: 'A data de nascimento não pode ser no futuro',
   // })
-  bornedAt: string;
+  bornedAt: Date;
 
   // @Matches(
   //   /^(\+?\d{1,3})?[-.\s]?(\(\d{1,3}\))?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
