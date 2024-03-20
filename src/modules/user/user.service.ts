@@ -3,12 +3,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { isEmail, isUUID } from 'class-validator';
 import { PrismaService } from 'src/infra/prisma.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
+import * as bcrypt from 'bcryptjs';
+import { isEmail, isUUID } from 'class-validator';
 
 @Injectable()
 export class UserService {
@@ -41,10 +41,16 @@ export class UserService {
 
     data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
-    return this.prisma.user.update({
-      where: { id },
-      data,
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
+      });
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 
   async updatePartial(
@@ -96,10 +102,16 @@ export class UserService {
       }
     }
 
-    return this.prisma.user.update({
-      where: { id },
-      data,
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
+      });
+
+      return user;
+    } catch (error) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
   }
 
   async validateUser(data: any) {

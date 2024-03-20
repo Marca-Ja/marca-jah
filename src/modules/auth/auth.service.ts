@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JwtService } from '@nestjs/jwt';
@@ -23,21 +23,19 @@ export class AuthService {
     if (!req.user) {
       return 'No user from google';
     }
-    const { email, firstName, lastName, accessToken, refreshToken } = req.user;
+    const { email, firstName, lastName } = req.user;
 
-    let session = await this.prismaService.sessionToDoctor.findFirst({
+    let session = await this.prismaService.doctor.findFirst({
       where: { email },
     });
 
     try {
       if (!session) {
-        session = await this.prismaService.sessionToDoctor.create({
+        session = await this.prismaService.doctor.create({
           data: {
             email,
             firstName,
             lastName,
-            accessToken,
-            refreshToken,
           },
         });
       }

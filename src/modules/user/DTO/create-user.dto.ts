@@ -10,6 +10,7 @@ import {
   MaxDate,
   Matches,
   IsEnum,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Role } from '../../../enum/role.enum';
