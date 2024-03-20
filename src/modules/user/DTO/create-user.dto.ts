@@ -10,6 +10,7 @@ import {
   MaxDate,
   Matches,
   IsEnum,
+  IsNotEmpty,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Role } from '../../../enum/role.enum';
@@ -30,20 +31,19 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  // @Type(() => Date)
-  // @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
   // @MinDate(getMinBirthDate(), {
   //   message: 'Você deve ter pelo menos 18 anos para se cadastrar',
   // })
   // @MaxDate(new Date(), {
   //   message: 'A data de nascimento não pode ser no futuro',
   // })
-  bornedAt: string;
+  bornedAt: Date;
 
-  // @Matches(
-  //   /^(\+?\d{1,3})?[-.\s]?(\(\d{1,3}\))?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
-  //   { message: 'Número de telefone inválido' },
-  // )
+  @IsNotEmpty()
+  @Matches(/^\d{9}$/, { message: 'Número de telefone inválido' })
   cellphone: string;
 
   @IsEmail()
@@ -58,9 +58,10 @@ export class CreateUserDTO {
   })
   password: string;
 
-  // @Matches(/^\d{8}$/, {
-  //   message: 'CEP inválido. O CEP deve conter 8 dígitos numéricos.',
-  // })
+  @IsOptional()
+  @Matches(/^\d{8}$/, {
+    message: 'CEP inválido. O CEP deve conter 8 dígitos numéricos.',
+  })
   postalCode: string;
 
   city: string;
