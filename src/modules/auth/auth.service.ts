@@ -23,21 +23,19 @@ export class AuthService {
     if (!req.user) {
       return 'No user from google';
     }
-    const { email, firstName, lastName, accessToken, refreshToken } = req.user;
+    const { email, firstName, lastName } = req.user;
 
-    let session = await this.prismaService.sessionToDoctor.findFirst({
+    let session = await this.prismaService.doctor.findFirst({
       where: { email },
     });
 
     try {
       if (!session) {
-        session = await this.prismaService.sessionToDoctor.create({
+        session = await this.prismaService.doctor.create({
           data: {
             email,
             firstName,
             lastName,
-            accessToken,
-            refreshToken,
           },
         });
       }
