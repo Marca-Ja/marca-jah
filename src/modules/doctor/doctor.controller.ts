@@ -1,23 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseGuards,
+  Get,
+  Param,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 
-import { DoctorService } from './doctor.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { error } from 'console';
-import { RoleGuard } from '../../guards/role.guard';
-import { AuthGuard } from '../../guards/auth.guard';
-import { Role } from '../../enum/role.enum';
 import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
+import { DoctorService } from './doctor.service';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Roles(Role.Doctor)
 @UseGuards(AuthGuard, RoleGuard)

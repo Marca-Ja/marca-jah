@@ -36,7 +36,7 @@ export class AuthController {
 
   @UseGuards(AuthGuard)
   @Post('token')
-  async verifyToken(@User() user) {
+  async verifyToken(@User() user: any) {
     return {
       user,
     };
