@@ -35,7 +35,7 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     String?       @map("borned_at")
+  bornedAt     DateTime?     @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
@@ -55,8 +55,10 @@ model Preference {
   createdAt  DateTime  @default(now()) @map("created_at")
   deletedAt  DateTime? @map("delete_at")
 
-  users   User[]
-  doctors Doctor[]
+  users           User[]
+  doctors         Doctor[]
+  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
+  doctorProfileId String?
 
   @@map("preferences")
 }
@@ -68,10 +70,21 @@ enum ServicePreference {
 }
 
 model Doctor {
+  id            String          @id @unique @default(uuid())
+  email         String          @unique
+  firstName     String
+  lastName      String
+  createdAt     DateTime        @default(now())
+  DoctorProfile DoctorProfile[]
+  Preference    Preference?     @relation(fields: [preferenceId], references: [id])
+  preferenceId  String?
+  Appointment   Appointment[]
+
+  @@map("doctors")
+}
+
+model DoctorProfile {
   id                String            @id @unique @default(uuid())
-  email             String            @unique
-  fistName          String
-  lastName          String
   university        String
   bornedAt          DateTime          @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
@@ -82,20 +95,11 @@ model Doctor {
   preferences Preference[]
 
   appointments Appointment[]
+  DoctorId     String?       @map("doctors_id")
+  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, onUpdate: Cascade, fields: [doctorId])
+  doctorId     String?
 
-  @@map("doctors")
-}
-
-model SessionToDoctor {
-  id           String   @id @unique @default(uuid())
-  email        String   @unique
-  firstName    String
-  lastName     String
-  accessToken  String   @db.VarChar(255)
-  refreshToken String
-  createdAt    DateTime @default(now())
-
-  @@map("sessions_to_doctors")
+  @@map("doctor_profiles")
 }
 
 model Appointment {
@@ -109,8 +113,10 @@ model Appointment {
   doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId String @map("user_id")
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId          String         @map("user_id")
+  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
+  doctorProfileId String?
 
   @@map("appointments")
 }

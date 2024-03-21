@@ -1,22 +1,20 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 
-import { DoctorService } from './doctor.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { error } from 'console';
-import { RoleGuard } from '../../guards/role.guard';
-import { AuthGuard } from '../../guards/auth.guard';
-import { Role } from '../../enum/role.enum';
 import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
+import { DoctorService } from './doctor.service';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @Roles(Role.Doctor)
 @UseGuards(AuthGuard, RoleGuard)
@@ -40,7 +38,7 @@ export class DoctorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(+id);
+    return this.doctorService.findOne(id);
   }
 
   // @Patch(':id')
@@ -48,8 +46,13 @@ export class DoctorController {
   //   return this.doctorService.update(+id, updateDoctorDto);
   // }
 
+  @Put(':id')
+  update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
+    return this.doctorService.update(id, data);
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.doctorService.remove(+id);
+    return this.doctorService.remove(id);
   }
 }

@@ -1,8 +1,35 @@
 ### Variables 
 @apiurl = http://localhost:3000
+@authToken = {{login.response.body.accessToken}}
+
+//AUTH
+
+
+### GET auth Google
+GET {{apiurl}}/auth HTTP/1.1
+
+### GET doctor Google
+GET {{apiurl}}/auth/google-redirect HTTP/1.1
+
+### POST login
+# @name login
+POST {{apiurl}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+   "email":"dai7@gmail.com",
+   "password":"12345%TTVHAa"
+}
+
+### POST verify token
+POST {{apiurl}}/auth/token
+Authorization: Bearer {{authToken}}
+
+//USERS
 
 ### GET users
 GET {{apiurl}}/user HTTP/1.1
+Authorization: Bearer {{authToken}}
 
 ### POST users
 POST {{apiurl}}/user HTTP/1.1
@@ -11,10 +38,10 @@ Content-Type: application/json
 {
    "name":"Ana",
    "socialName":"",
-   "lastName":"Barreto",
-   "bornedAt":"1985/09/16",
-   "email":"ana3@gmail.com",
-   "cellphone": "(21)974331945",
+   "lastName":"Ramakrishna",
+   "bornedAt":"2019-04-26T23:53:54Z",
+   "email":"dai7@gmail.com",
+   "cellphone": "999189314",
    "password":"12345%TTVHAa",
    "postalCode": "97770000",
    "city": "Santa Maria",
@@ -24,35 +51,38 @@ Content-Type: application/json
    "receiveNews": true
 }
 ### PUT users
-PUT {{apiurl}}/user HTTP/1.1
+PUT {{apiurl}}/user/edf4e29b-b756-4100-9b29-c57385676360 HTTP/1.1
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
    "name":"Tenali",
    "socialName":"",
    "lastName":"Ramakrishna",
-   "bornedAt":"1985-09-16",
-   "email":"dai3@gmail.com",
-   "cellphone": "",
+   "bornedAt":"2019-04-26T23:53:54Z",
+   "email":"dai7@gmail.com",
+   "cellphone": "999189314",
    "password":"12345%TTVHAa",
-   "postalCode": "97770-000",
+   "postalCode": "97770000",
    "city": "Santa Maria",
    "state": "RS",
    "street": "Redencio Frizzo",
    "maritalState":"SINGLE",
    "receiveNews": true
 }
+
 ### PATCH users
-PATCH {{apiurl}}/user HTTP/1.1
+PATCH {{apiurl}}/user/edf4e29b-b756-4100-9b29-c57385676360 HTTP/1.1
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
    "name":"Tenali",
    "socialName":"",
    "lastName":"Ramakrishna",
-   "bornedAt":"1985-09-16",
-   "email":"dai3@gmail.com",
-   "cellphone": "",
+   "bornedAt":"2019-04-26T23:53:54Z",
+   "email":"dai7@gmail.com",
+   "cellphone": "999189314",
    "password":"12345%TTVHAa",
    "postalCode": "97770000",
    "city": "Santa Maria",
@@ -62,28 +92,42 @@ Content-Type: application/json
    "receiveNews": true
 }
 
-### PUT users
-PUT {{apiurl}}/user/2fad6996-9c01-43c0-80a3-fb19ee89787d HTTP/1.1
+
+
+### GET doctor
+GET {{apiurl}}/doctor HTTP/1.1
+Authorization: Bearer {{authToken}}
+
+### GET doctor
+GET {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+Authorization: Bearer {{authToken}}
+
+###PUT doctor
+PUT {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-   "name":"Luna",
+   # "name":"Tenali",
+   # "socialName":"",
+   # "lastName":"Ramakrishna",
+   # "bornedAt":"1985-09-16",
+   # "email":""
+   }
+
+### PATCH doctor
+PATCH {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+   "name":"Tenali",
    "socialName":"",
    "lastName":"Ramakrishna",
-   "bornedAt":"1985/09/16",
-   "email":"luna@gmail.com",
-   "cellphone": "",
-   "password":"12345%TTVHAa",
-   "postalCode": "97770000",
-   "city": "Santa Maria",
-   "state": "RS",
-   "street": "Redencio Frizzo",
-   "maritalState":"SINGLE",
-   "receiveNews": true
-}
+   "bornedAt":"1985-09-16",
+   "email":""
+   }
 
-### GET auth Google
-GET {{apiurl}}/auth HTTP/1.1
-
-### GET doctor Google
-GET {{apiurl}}/auth/google-redirect HTTP/1.1
+### DELETE doctor
+DELETE {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+Authorization: Bearer {{authToken}}
