@@ -8,6 +8,7 @@ import {
   IsDate,
   Matches,
   IsEnum,
+  IsDateString,
 } from 'class-validator';
 import { IsOlderThan18 } from 'src/decorators/validation.decorator';
 import { Type } from 'class-transformer';
@@ -29,9 +30,9 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  // @Type(() => Date)
-  // @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
-  // @IsOlderThan18()
+  @Type(() => Date) 
+  @IsDate()
+  @IsOlderThan18({ message: 'Você deve ter pelo menos 18 anos para se cadastrar'})
   bornedAt: string;
 
   @Matches(

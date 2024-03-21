@@ -39,7 +39,7 @@ Content-Type: application/json
    "name":"Ana",
    "socialName":"",
    "lastName":"Barreto",
-   "bornedAt":"1985/10/06",
+   "bornedAt":"2010/10/06",
    "email":"ana1@gmail.com",
    "cellphone": "(21)974331945",
    "password":"12345%TTVHAa",
