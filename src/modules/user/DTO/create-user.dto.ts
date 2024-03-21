@@ -6,12 +6,10 @@ import {
   IsStrongPassword,
   MinLength,
   IsDate,
-  MinDate,
-  MaxDate,
   Matches,
   IsEnum,
-  IsNotEmpty,
 } from 'class-validator';
+import { IsOlderThan18 } from 'src/decorators/validation.decorator';
 import { Type } from 'class-transformer';
 import { Role } from '../../../enum/role.enum';
 
@@ -31,14 +29,9 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  @Type(() => Date)
-  @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
-  @MinDate(new Date(), {
-    message: 'A data de nascimento não pode ser no futuro',
-  })
-  @MaxDate(getMinBirthDate(), {
-    message: 'Você deve ter pelo menos 18 anos para se cadastrar',
-  })
+  // @Type(() => Date)
+  // @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
+  // @IsOlderThan18()
   bornedAt: string;
 
   @Matches(

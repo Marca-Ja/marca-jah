@@ -9,6 +9,7 @@ import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { isEmail, isUUID } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -17,6 +18,14 @@ export class UserService {
   async create(data: CreateUserDTO) {
     await this.validateUser(data);
 
+    // const date = new Date(data.bornedAt);
+    // console.log(date.toISOString)
+    // console.log(date)
+    // const isoDate = date.toISOString();
+    // console.log(isoDate)
+    // data.bornedAt = isoDate
+
+    console.log(data.bornedAt, "como vai p prisma")
     data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
     return this.prisma.user.create({ data });
@@ -133,14 +142,6 @@ export class UserService {
       if (userEmail) {
         throw new UnauthorizedException('Email já cadastrado');
       }
-    }
-
-    const userId = await this.prisma.user.findFirst({
-      where: { id: data.id },
-    });
-
-    if (!userId) {
-      throw new NotFoundException('User not found');
     }
 
     return true;
