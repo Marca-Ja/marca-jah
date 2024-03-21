@@ -79,7 +79,6 @@ export class CreateUserDTO {
   @IsEnum(Role)
   role: string;
   // medical_interest: string[];
-
 }
 
 function getMinBirthDate(): Date {
