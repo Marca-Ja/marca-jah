@@ -35,7 +35,7 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     DateTime?     @map("borned_at")
+  bornedAt     String?       @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
