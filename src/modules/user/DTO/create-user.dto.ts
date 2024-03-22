@@ -23,14 +23,11 @@ export class CreateUserDTO {
 
   @IsOptional()
   @IsString()
-  // @MinLength(3)
   socialName: string;
 
   @IsString()
   @MinLength(3)
   lastName: string;
-
-  //   dependents: string[];
 
   @Type(() => Date)
   @IsDate()
@@ -77,5 +74,4 @@ export class CreateUserDTO {
   @IsOptional()
   @IsEnum(Role)
   role: string;
-  // medical_interest: string[];
 }
