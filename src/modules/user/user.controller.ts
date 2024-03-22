@@ -18,11 +18,11 @@ import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
 
 @Roles(Role.User)
-@UseGuards(AuthGuard, RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userservice: UserService) {}
 
+  @UseGuards(AuthGuard, RoleGuard)
   @Get()
   async list() {
     return this.userservice.list();
@@ -33,11 +33,13 @@ export class UserController {
     return this.userservice.create(data);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
   async update(@Body() data: UpdatePutUserDTO, @Param('id') id: string) {
     return this.userservice.update(id, data);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async updatePartial(
     @Body() data: UpdatePatchUserDTO,
@@ -45,4 +47,5 @@ export class UserController {
   ) {
     return this.userservice.updatePartial(id, data);
   }
+
 }
