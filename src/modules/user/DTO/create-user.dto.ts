@@ -1,17 +1,16 @@
 import { MaritalState } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   IsStrongPassword,
-  MinLength,
-  IsDate,
   Matches,
-  IsEnum,
-  IsDateString,
+  MinLength,
 } from 'class-validator';
 import { IsOlderThan18 } from 'src/decorators/validation.decorator';
-import { Type } from 'class-transformer';
 import { Role } from '../../../enum/role.enum';
 
 export class CreateUserDTO {
@@ -30,9 +29,11 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  @Type(() => Date) 
+  @Type(() => Date)
   @IsDate()
-  @IsOlderThan18({ message: 'Você deve ter pelo menos 18 anos para se cadastrar'})
+  @IsOlderThan18({
+    message: 'Você deve ter pelo menos 18 anos para se cadastrar',
+  })
   bornedAt: string;
 
   @Matches(
