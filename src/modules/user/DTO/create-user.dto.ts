@@ -6,12 +6,11 @@ import {
   IsStrongPassword,
   MinLength,
   IsDate,
-  MinDate,
-  MaxDate,
   Matches,
   IsEnum,
-  IsNotEmpty,
+  IsDateString,
 } from 'class-validator';
+import { IsOlderThan18 } from 'src/decorators/validation.decorator';
 import { Type } from 'class-transformer';
 import { Role } from '../../../enum/role.enum';
 
@@ -31,19 +30,15 @@ export class CreateUserDTO {
 
   //   dependents: string[];
 
-  @IsOptional()
-  @Type(() => Date)
-  @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
-  // @MinDate(getMinBirthDate(), {
-  //   message: 'Você deve ter pelo menos 18 anos para se cadastrar',
-  // })
-  // @MaxDate(new Date(), {
-  //   message: 'A data de nascimento não pode ser no futuro',
-  // })
-  bornedAt: Date;
+  @Type(() => Date) 
+  @IsDate()
+  @IsOlderThan18({ message: 'Você deve ter pelo menos 18 anos para se cadastrar'})
+  bornedAt: string;
 
-  @IsNotEmpty()
-  @Matches(/^\d{9}$/, { message: 'Número de telefone inválido' })
+  @Matches(
+    /^(\+?\d{1,3})?[-.\s]?\(?(\d{1,3})\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+    { message: 'Número de telefone inválido' },
+  )
   cellphone: string;
 
   @IsEmail()

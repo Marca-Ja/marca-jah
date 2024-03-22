@@ -9,6 +9,7 @@ import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import * as bcrypt from 'bcryptjs';
 import { isEmail, isUUID } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -133,14 +134,6 @@ export class UserService {
       if (userEmail) {
         throw new UnauthorizedException('Email já cadastrado');
       }
-    }
-
-    const userId = await this.prisma.user.findFirst({
-      where: { id: data.id },
-    });
-
-    if (!userId) {
-      throw new NotFoundException('User not found');
     }
 
     return true;
