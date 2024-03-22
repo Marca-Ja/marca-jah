@@ -13,7 +13,7 @@ import { Role } from '../../../enum/role.enum';
 export class CreateDoctorDto {
   @IsString()
   @MinLength(3)
-  fistName: string;
+  firstName: string;
 
   @IsEmail()
   email: string;
