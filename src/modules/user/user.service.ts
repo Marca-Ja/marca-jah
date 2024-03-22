@@ -3,13 +3,12 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import * as bcrypt from 'bcryptjs';
+import { isEmail, isUUID } from 'class-validator';
 import { PrismaService } from 'src/infra/prisma.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
-import * as bcrypt from 'bcryptjs';
-import { isEmail, isUUID } from 'class-validator';
-import { Type } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -126,7 +125,7 @@ export class UserService {
       }
     }
 
-    if (isEmail(data.email) && data.email.length > 0) {
+    if (isEmail(data.email)) {
       const userEmail = await this.prisma.user.findFirst({
         where: { email: data.email },
       });
