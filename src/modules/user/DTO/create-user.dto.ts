@@ -49,7 +49,10 @@ export class CreateUserDTO {
   )
   cellphone: string;
 
-  @ApiProperty({ example: 'jhonDoe@email.com' })
+  @ApiProperty({
+    example: 'jhonDoe@email.com',
+    description: 'O E-mail é um campo único no banco de dados',
+  })
   @IsEmail()
   email: string;
 
