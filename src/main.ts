@@ -13,6 +13,17 @@ async function bootstrap() {
       'API criada para facilitar agendamentos de consultas médicas',
     )
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        name: 'authorization',
+        in: 'header',
+        bearerFormat: 'JWT',
+        description: 'Use `accessToken`, ele é obtido no login.',
+      },
+      'access',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

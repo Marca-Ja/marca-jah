@@ -8,7 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
 import { AuthGuard } from '../../guards/auth.guard';
@@ -26,6 +26,7 @@ export class UserController {
   constructor(private readonly userservice: UserService) {}
 
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth('access')
   @Get()
   async list() {
     return this.userservice.list();
@@ -37,12 +38,14 @@ export class UserController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
   @Put(':id')
   async update(@Body() data: UpdatePutUserDTO, @Param('id') id: string) {
     return this.userservice.update(id, data);
   }
 
   @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
   @Patch(':id')
   async updatePartial(
     @Body() data: UpdatePatchUserDTO,

@@ -15,9 +15,10 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from './doctor.service';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @Roles(Role.Doctor)
+@ApiBearerAuth('access')
 @UseGuards(AuthGuard, RoleGuard)
 @ApiTags('Doctor')
 @Controller('doctor')
