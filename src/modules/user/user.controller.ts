@@ -22,6 +22,7 @@ import { responses } from '../../global/docs/schema.docs';
 @ApiTags('User')
 @Roles(Role.User)
 @ApiQuery({ name: 'role', enum: Role })
+@UseGuards(RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userservice: UserService) {}
