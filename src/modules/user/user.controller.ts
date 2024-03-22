@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
 import { AuthGuard } from '../../guards/auth.guard';
@@ -16,9 +17,9 @@ import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
-import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('User')
+@ApiQuery({ name: 'role', enum: Role })
 @Roles(Role.User)
 @Controller('user')
 export class UserController {
@@ -49,5 +50,4 @@ export class UserController {
   ) {
     return this.userservice.updatePartial(id, data);
   }
-
 }
