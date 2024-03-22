@@ -12,24 +12,24 @@ import { Role } from '../../../enum/role.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDoctorDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'Jhon' })
   @IsString()
   @MinLength(3)
   firstName: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'jhonDoe@email.com' })
   @IsEmail()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Doe' })
   @IsString()
   lastName: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'UFRJ' })
   @IsString()
   university: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '1980/09/12' })
   @IsDateString()
   bornedAt: string;
 
@@ -37,7 +37,7 @@ export class CreateDoctorDto {
   @IsDateString()
   updatedAt: string;
 
-  @ApiProperty()
+  @ApiProperty({ examples: ['Cardiologista', 'Clínico Geral', 'Pediatra'] })
   servicePreference: ServicePreference;
 
   @ApiProperty()
