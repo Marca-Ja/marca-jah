@@ -10,7 +10,10 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-import { IsOlderThan18 } from 'src/decorators/validation.decorator';
+import {
+  IsWithinLast130Years,
+  IsOlderThan18,
+} from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
 
 export class CreateUserDTO {
@@ -34,6 +37,7 @@ export class CreateUserDTO {
   @IsOlderThan18({
     message: 'Você deve ter pelo menos 18 anos para se cadastrar',
   })
+  @IsWithinLast130Years({ message: 'Data de nascimento inválida' })
   bornedAt: string;
 
   @Matches(
@@ -74,9 +78,4 @@ export class CreateUserDTO {
   @IsEnum(Role)
   role: string;
   // medical_interest: string[];
-}
-
-function getMinBirthDate(): Date {
-  const today = new Date();
-  return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 }
