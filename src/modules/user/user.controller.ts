@@ -16,7 +16,9 @@ import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Roles(Role.User)
 @Controller('user')
 export class UserController {

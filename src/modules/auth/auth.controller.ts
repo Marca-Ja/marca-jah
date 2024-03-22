@@ -12,7 +12,9 @@ import { GoogleOAuthGuard } from '../../guards/google-oauth.guard';
 import { DoctorService } from '../doctor/doctor.service';
 import { AuthLoginDTO } from './DTO/auth-login.dto';
 import { AuthService } from './auth.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(

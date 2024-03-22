@@ -15,9 +15,11 @@ import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from './doctor.service';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Roles(Role.Doctor)
 @UseGuards(AuthGuard, RoleGuard)
+@ApiTags('Doctor')
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
