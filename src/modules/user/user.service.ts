@@ -104,17 +104,12 @@ export class UserService {
     }
 
     try {
-      const userEmail = await this.prisma.user.findFirst({
-        where: { id } && { email: data.email },
+      const user = await this.prisma.user.update({
+        where: { id },
+        data,
       });
 
-      if (userEmail) {
-        const user = await this.prisma.user.update({
-          where: { id },
-          data,
-        });
-        return user;
-      }
+      return user;
     } catch (error) {
       throw new InternalServerErrorException('Algo deu errado :(');
     }
