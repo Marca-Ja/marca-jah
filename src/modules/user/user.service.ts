@@ -1,5 +1,6 @@
 import {
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -103,14 +104,19 @@ export class UserService {
     }
 
     try {
-      const user = await this.prisma.user.update({
-        where: { id },
-        data,
+      const userEmail = await this.prisma.user.findFirst({
+        where: { id } && { email: data.email },
       });
 
-      return user;
+      if (userEmail) {
+        const user = await this.prisma.user.update({
+          where: { id },
+          data,
+        });
+        return user;
+      }
     } catch (error) {
-      throw new NotFoundException('Usuário não encontrado');
+      throw new InternalServerErrorException('Algo deu errado :(');
     }
   }
 
