@@ -1,17 +1,16 @@
 import { MaritalState } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   IsStrongPassword,
-  MinLength,
-  IsDate,
   Matches,
-  IsEnum,
-  IsDateString,
+  MinLength,
 } from 'class-validator';
-import { IsOlderThan18 } from 'src/decorators/validation.decorator';
-import { Type } from 'class-transformer';
+import { IsWithinLast130Years, IsOlderThan18 } from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
 
 export class CreateUserDTO {
@@ -33,6 +32,7 @@ export class CreateUserDTO {
   @Type(() => Date) 
   @IsDate()
   @IsOlderThan18({ message: 'Você deve ter pelo menos 18 anos para se cadastrar'})
+  @IsWithinLast130Years({message: 'Data de nascimento inválida'})
   bornedAt: string;
 
   @Matches(
@@ -75,7 +75,3 @@ export class CreateUserDTO {
   // medical_interest: string[];
 }
 
-function getMinBirthDate(): Date {
-  const today = new Date();
-  return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-}

@@ -23,3 +23,24 @@ export function IsOlderThan18(validationOptions?: ValidationOptions) {
     });
   };
 }
+
+export function IsWithinLast130Years(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      name: 'isWithinLast130Years',
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: any, args: ValidationArguments) {
+          const currentDate = new Date();
+
+          const currentYear = currentDate.getFullYear();
+          const minYear = currentYear - 130;
+
+          return value.getFullYear() >= minYear && value.getFullYear() <= currentYear;
+        },
+      },
+    });
+  };
+}
