@@ -47,4 +47,5 @@ export class UserController {
   ) {
     return this.userservice.updatePartial(id, data);
   }
+
 }
