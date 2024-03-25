@@ -62,10 +62,10 @@ This is the dream team that made it all happen: 💜
         <sub> Ana Beatriz Barreto <sub/>
         <a/>
     </td>
-    <td align="center">
-      <a href="">
+      <td align="center">
+      <a href="https://www.linkedin.com/in/alexnderp/">
         <img src="https://github.com/Alexnderp.png" width="100px;" alt="perfil alex"/><br/>
-        <sub> Alexandre <sub/>
+        <sub> Alexander Pereira <sub/>
         <a/>
     </td>
   </tr>
