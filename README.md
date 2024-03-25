@@ -74,7 +74,7 @@ This is the dream team that made it all happen: 💜
 
 <p id="license">
 	
-## 📝 Licese
+## 📝 License
 </p>
 
 This project is under license [MIT](./LICENSE).
