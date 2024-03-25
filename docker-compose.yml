@@ -9,7 +9,6 @@ services:
     image: mysql
     ports:
       - 3306:3306
-    restart: always
     networks:
       - default
     environment:
@@ -25,7 +24,6 @@ services:
     ports:
       - 3000:3000
     command: npm run dev
-    restart: always
     env_file:
       - .env
       - .env-docker

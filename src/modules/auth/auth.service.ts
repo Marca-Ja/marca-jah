@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { User } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JwtService } from '@nestjs/jwt';
@@ -15,7 +15,7 @@ export class AuthService {
   private audience = 'users';
 
   constructor(
-    private readonly JwtService: JwtService,
+    private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
   ) {}
 
@@ -23,21 +23,19 @@ export class AuthService {
     if (!req.user) {
       return 'No user from google';
     }
-    const { email, firstName, lastName, accessToken, refreshToken } = req.user;
+    const { email, firstName, lastName } = req.user;
 
-    let session = await this.prismaService.sessionToDoctor.findFirst({
+    let session = await this.prismaService.doctor.findFirst({
       where: { email },
     });
 
     try {
       if (!session) {
-        session = await this.prismaService.sessionToDoctor.create({
+        session = await this.prismaService.doctor.create({
           data: {
             email,
             firstName,
             lastName,
-            accessToken,
-            refreshToken,
           },
         });
       }
@@ -53,7 +51,7 @@ export class AuthService {
 
   createToken(user: User) {
     return {
-      accessToken: this.JwtService.sign(
+      accessToken: this.jwtService.sign(
         {
           name: user.name,
           email: user.email,
@@ -69,14 +67,15 @@ export class AuthService {
   }
   verifyToken(token: string) {
     try {
-      const data = this.JwtService.verify(token, {
+      const data = this.jwtService.verify(token, {
         issuer: this.issuer,
         audience: this.audience,
+        secret: process.env.JWT_SECRET,
       });
 
       return data;
     } catch (error) {
-      throw new BadRequestException(error);
+      throw new UnauthorizedException('Token inválido');
     }
   }
 
@@ -87,7 +86,6 @@ export class AuthService {
           email,
         },
       });
-
       if (user) {
         return this.createToken(user);
       }
@@ -98,8 +96,7 @@ export class AuthService {
 
       throw new UnauthorizedException('E-mail ou senha inválido(s)');
     } catch (error) {
-      console.error('Error fetching user:', error);
-      throw error;
+      throw new BadRequestException(error.message);
     }
   }
 }

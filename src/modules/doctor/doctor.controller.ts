@@ -1,25 +1,27 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 
-import { DoctorService } from './doctor.service';
-import { CreateDoctorDto } from './dto/create-doctor.dto';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { error } from 'console';
-import { RoleGuard } from '../../guards/role.guard';
-import { AuthGuard } from '../../guards/auth.guard';
-import { Role } from '../../enum/role.enum';
 import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
+import { DoctorService } from './doctor.service';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { responses } from '../../global/docs/schema.docs';
 
 @Roles(Role.Doctor)
+@ApiBearerAuth('access')
 @UseGuards(AuthGuard, RoleGuard)
+@ApiTags('Doctor')
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
@@ -30,6 +32,12 @@ export class DoctorController {
   // }
 
   @Get()
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
   findAll() {
     try {
       return this.doctorService.findAll();
@@ -39,8 +47,14 @@ export class DoctorController {
   }
 
   @Get(':id')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
   findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(+id);
+    return this.doctorService.findOne(id);
   }
 
   // @Patch(':id')
@@ -48,8 +62,25 @@ export class DoctorController {
   //   return this.doctorService.update(+id, updateDoctorDto);
   // }
 
+  @Put(':id')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
+    return this.doctorService.update(id, data);
+  }
+
   @Delete(':id')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
   remove(@Param('id') id: string) {
-    return this.doctorService.remove(+id);
+    return this.doctorService.remove(id);
   }
 }
