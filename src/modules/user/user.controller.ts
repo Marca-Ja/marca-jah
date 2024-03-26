@@ -9,21 +9,19 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
+import { responses } from '../../global/docs/schema.docs';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
-import { responses } from '../../global/docs/schema.docs';
 
 @ApiTags('User')
 @Roles(Role.User)
-@ApiQuery({ name: 'role', enum: Role })
-@UseGuards(RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userservice: UserService) {}
@@ -41,6 +39,7 @@ export class UserController {
     return this.userservice.list();
   }
 
+  @UseGuards(RoleGuard)
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -52,7 +51,7 @@ export class UserController {
     return this.userservice.create(data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -65,7 +64,7 @@ export class UserController {
     return this.userservice.update(id, data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)

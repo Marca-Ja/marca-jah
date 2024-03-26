@@ -35,7 +35,7 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     String?       @map("borned_at")
+  bornedAt     DateTime?     @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
@@ -43,24 +43,24 @@ model User {
   updatedAt    DateTime?     @updatedAt @map("update_at")
   deletedAt    DateTime?     @map("delete_at")
 
-  preferences  Preference[]
+  specialtys   Specialty[]
   appointments Appointment[]
 
   @@map("users")
 }
 
-model Preference {
-  id         String    @id @unique @default(uuid())
-  preference String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  deletedAt  DateTime? @map("delete_at")
+model Specialty {
+  id        String    @id @unique @default(uuid())
+  specialty String
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("delete_at")
 
   users           User[]
   doctors         Doctor[]
   DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
   doctorProfileId String?
 
-  @@map("preferences")
+  @@map("Specialtys")
 }
 
 enum ServicePreference {
@@ -76,9 +76,10 @@ model Doctor {
   lastName      String
   createdAt     DateTime        @default(now())
   DoctorProfile DoctorProfile[]
-  Preference    Preference?     @relation(fields: [preferenceId], references: [id])
-  preferenceId  String?
+  specialty     Specialty?      @relation(fields: [specialtyId], references: [id])
+  specialtyId   String?
   Appointment   Appointment[]
+  role          String          @default("Doctor")
 
   @@map("doctors")
 }
@@ -88,16 +89,14 @@ model DoctorProfile {
   university        String
   bornedAt          DateTime          @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
-  role              String            @default("Doctor")
   createdAt         DateTime          @default(now()) @map("created_at")
   updatedAt         DateTime          @updatedAt @map("update_at")
 
-  preferences Preference[]
+  Specialtys Specialty[]
 
   appointments Appointment[]
   DoctorId     String?       @map("doctors_id")
-  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, onUpdate: Cascade, fields: [doctorId])
-  doctorId     String?
+  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, onUpdate: Cascade, fields: [DoctorId])
 
   @@map("doctor_profiles")
 }
