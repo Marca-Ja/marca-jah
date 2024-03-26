@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -79,4 +80,29 @@ export class UserController {
   ) {
     return this.userservice.updatePartial(id, data);
   }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Get('doctors')
+  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+    return this.userservice.findAll(page, limit);
+  }
+
+  // @Get('doctors/:preference')
+  // @ApiResponse(responses.ok)
+  // @ApiResponse(responses.badRequest)
+  // @ApiResponse(responses.unauthorized)
+  // @ApiResponse(responses.forbidden)
+  // @ApiResponse(responses.unprocessable)
+  // @ApiResponse(responses.internalError)
+  // findPreference(@Param('preference') preference: string, @Query('page') page: number, @Query('limit') limit: number) {
+  //   return this.userservice.findPreference(preference, page, limit);
+  // }
+
 }
