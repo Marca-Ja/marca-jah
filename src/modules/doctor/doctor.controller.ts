@@ -25,11 +25,6 @@ import { AuthGuard } from '../../guards/auth.guard';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
-  // @Post()
-  // create(@Body() createDoctorDto: CreateDoctorDto) {
-  //   return this.doctorService.create(createDoctorDto);
-  // }
-
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
