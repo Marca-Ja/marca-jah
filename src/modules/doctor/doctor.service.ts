@@ -6,6 +6,10 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
 
+  // create(createDoctorDto: CreateDoctorDto) {
+  //   return 'This action adds a new doctor';
+  // }
+
   async findAll() {
     return this.prisma.doctor.findMany();
   }

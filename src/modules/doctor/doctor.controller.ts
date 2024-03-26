@@ -6,6 +6,7 @@ import {
   Param,
   Put,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 
 import { error } from 'console';
