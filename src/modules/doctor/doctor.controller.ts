@@ -26,11 +26,6 @@ import { responses } from '../../global/docs/schema.docs';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
-  // @Post()
-  // create(@Body() createDoctorDto: CreateDoctorDto) {
-  //   return this.doctorService.create(createDoctorDto);
-  // }
-
   @Get()
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -56,11 +51,6 @@ export class DoctorController {
   findOne(@Param('id') id: string) {
     return this.doctorService.findOne(id);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateDoctorDto: UpdateDoctorDto) {
-  //   return this.doctorService.update(+id, updateDoctorDto);
-  // }
 
   @Put(':id')
   @ApiResponse(responses.ok)

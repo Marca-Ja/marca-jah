@@ -22,7 +22,6 @@ import { responses } from '../../global/docs/schema.docs';
 @ApiTags('User')
 @Roles(Role.User)
 @ApiQuery({ name: 'role', enum: Role })
-@UseGuards(RoleGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userservice: UserService) {}
@@ -40,6 +39,7 @@ export class UserController {
     return this.userservice.list();
   }
 
+  @UseGuards(RoleGuard)
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -51,7 +51,7 @@ export class UserController {
     return this.userservice.create(data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -64,7 +64,7 @@ export class UserController {
     return this.userservice.update(id, data);
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
