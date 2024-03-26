@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { MaritalState } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
@@ -9,18 +10,12 @@ import {
   IsStrongPassword,
   Matches,
   MinLength,
-  IsDate,
-  MinDate,
-  MaxDate,
-  Matches,
-  IsEnum,
 } from 'class-validator';
 import {
-  IsWithinLast130Years,
   IsOlderThan18,
+  IsWithinLast130Years,
 } from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
   @ApiProperty({ example: 'Jhon' })
