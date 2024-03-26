@@ -7,17 +7,24 @@ export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.doctor.findMany();
+    return this.prisma.doctor.findMany({
+      include: {
+        DoctorProfile: true,
+      },
+    });
   }
 
   async findOne(id: string) {
-    return this.prisma.doctor.findFirst({ where: { id } });
+    return this.prisma.doctor.findFirst({
+      include: { DoctorProfile: true },
+      where: { id },
+    });
   }
 
   async update(id: string, data: UpdateDoctorDto) {
     await this.exists(id);
 
-    return this.prisma.doctor.update({
+    return this.prisma.doctorProfile.update({
       data,
       where: { id },
     });
