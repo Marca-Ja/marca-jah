@@ -1,54 +1,62 @@
 import { MaritalState } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsEmail,
+  IsEnum,
   IsOptional,
   IsString,
   IsStrongPassword,
-  MinLength,
-  IsDate,
-  MinDate,
-  MaxDate,
   Matches,
-  IsEnum,
-  IsNotEmpty,
+  MinLength,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import {
+  IsWithinLast130Years,
+  IsOlderThan18,
+} from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
+  @ApiProperty({ example: 'Jhon' })
   @IsString()
   @MinLength(3)
   name: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsString()
-  // @MinLength(3)
   socialName: string;
 
+  @ApiProperty({ example: 'Doe' })
   @IsString()
   @MinLength(3)
   lastName: string;
 
-  //   dependents: string[];
-
-  @IsOptional()
+  @ApiProperty({ example: '1980/09/12' })
   @Type(() => Date)
-  @IsDate({ message: 'A data de nascimento deve ser uma data válida' })
-  // @MinDate(getMinBirthDate(), {
-  //   message: 'Você deve ter pelo menos 18 anos para se cadastrar',
-  // })
-  // @MaxDate(new Date(), {
-  //   message: 'A data de nascimento não pode ser no futuro',
-  // })
-  bornedAt: Date;
+  @IsDate()
+  @IsOlderThan18({
+    message: 'Você deve ter pelo menos 18 anos para se cadastrar',
+  })
+  @IsWithinLast130Years({ message: 'Data de nascimento inválida' })
+  bornedAt: string;
 
-  @IsNotEmpty()
-  @Matches(/^\d{9}$/, { message: 'Número de telefone inválido' })
+  @ApiProperty({ example: '(21)974331945' })
+  @Matches(
+    /^(\+?\d{1,3})?[-.\s]?\(?(\d{1,3})\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/,
+    { message: 'Número de telefone inválido' },
+  )
   cellphone: string;
 
+  @ApiProperty({
+    example: 'jhonDoe@email.com',
+    description: 'O E-mail é um campo único no banco de dados',
+  })
   @IsEmail()
   email: string;
 
+  @ApiProperty({ example: 'Marca@Ja123#' })
   @IsStrongPassword({
     minLength: 6,
     minUppercase: 1,
@@ -58,29 +66,39 @@ export class CreateUserDTO {
   })
   password: string;
 
+  @ApiProperty({ example: '68901350' })
   @IsOptional()
   @Matches(/^\d{8}$/, {
     message: 'CEP inválido. O CEP deve conter 8 dígitos numéricos.',
   })
   postalCode: string;
 
+  @ApiProperty({ example: 'Macapá' })
   city: string;
 
+  @ApiProperty({ example: 'AP' })
   state: string;
 
+  @ApiProperty({ example: 'Rua Barão de Mauá' })
   street: string;
 
+  @ApiProperty({
+    enum: [
+      'SINGLE',
+      'MARRIED',
+      'DIVORCED',
+      'WINDOWED',
+      'SEPARATED',
+      'IN_CIVIL_UNION',
+    ],
+  })
   maritalState: MaritalState;
 
+  @ApiProperty()
   receiveNews: boolean;
 
+  @ApiProperty({ enum: ['User', 'Doctor'] })
   @IsOptional()
   @IsEnum(Role)
   role: string;
-  // medical_interest: string[];
 }
-
-// function getMinBirthDate(): Date {
-//   const today = new Date();
-//   return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-// }

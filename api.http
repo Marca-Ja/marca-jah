@@ -4,7 +4,6 @@
 
 //AUTH
 
-
 ### GET auth Google
 GET {{apiurl}}/auth HTTP/1.1
 
@@ -36,12 +35,12 @@ POST {{apiurl}}/user HTTP/1.1
 Content-Type: application/json
 
 {
-   "name":"Tenali",
+   "name":"Kauane",
    "socialName":"",
-   "lastName":"Ramakrishna",
-   "bornedAt":"2019-04-26T23:53:54Z",
-   "email":"dai7@gmail.com",
-   "cellphone": "999189314",
+   "lastName":"Santos",
+   "bornedAt":"2004/02/03",
+   "email":"kauaneTest3@gmail.com",
+   "cellphone": "(21)974331945",
    "password":"12345%TTVHAa",
    "postalCode": "97770000",
    "city": "Santa Maria",
@@ -51,17 +50,17 @@ Content-Type: application/json
    "receiveNews": true
 }
 ### PUT users
-PUT {{apiurl}}/user/edf4e29b-b756-4100-9b29-c57385676360 HTTP/1.1
+PUT {{apiurl}}/user/35fe789c-0c7a-4dbf-ba25-387ef199a994 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-   "name":"Tenali",
+   "name":"Kauane",
    "socialName":"",
-   "lastName":"Ramakrishna",
-   "bornedAt":"2019-04-26T23:53:54Z",
-   "email":"dai7@gmail.com",
-   "cellphone": "999189314",
+   "lastName":"Santos",
+   "bornedAt":"2004/02/03",
+   "email":"kauaneTest3@gmail.com",
+   "cellphone": "(21)974331945",
    "password":"12345%TTVHAa",
    "postalCode": "97770000",
    "city": "Santa Maria",
@@ -72,17 +71,37 @@ Content-Type: application/json
 }
 
 ### PATCH users
-PATCH {{apiurl}}/user/edf4e29b-b756-4100-9b29-c57385676360 HTTP/1.1
+PATCH {{apiurl}}/user/35fe789c-0c7a-4dbf-ba25-387ef199a994 HTTP/1.1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-   "name":"Tenali",
+   "name":"Kauane Patch",
+   "socialName":"",
+   "lastName":"Santos",
+   "bornedAt":"2004/02/03",
+   "email":"kauaneTest3@gmail.com",
+   "cellphone": "(21)974331945",
+   "password":"12345%TTVHAa",
+   "postalCode": "97770000",
+   "city": "Santa Maria",
+   "state": "RS",
+   "street": "Redencio Frizzo",
+   "maritalState":"SINGLE",
+   "receiveNews": true
+}
+
+### PUT users
+PUT {{apiurl}}/user/2fad6996-9c01-43c0-80a3-fb19ee89787d HTTP/1.1
+Content-Type: application/json
+
+{
+   "name":"Luna",
    "socialName":"",
    "lastName":"Ramakrishna",
-   "bornedAt":"2019-04-26T23:53:54Z",
-   "email":"dai7@gmail.com",
-   "cellphone": "999189314",
+   "bornedAt":"1985/09/16",
+   "email":"luna@gmail.com",
+   "cellphone": "",
    "password":"12345%TTVHAa",
    "postalCode": "97770000",
    "city": "Santa Maria",
@@ -93,6 +112,7 @@ Content-Type: application/json
 }
 
 
+//DOCTORS
 
 ### GET doctor
 GET {{apiurl}}/doctor HTTP/1.1
