@@ -93,15 +93,15 @@ export class UserController {
     return this.userservice.findAll(page, limit);
   }
 
-  // @Get('doctors/:preference')
-  // @ApiResponse(responses.ok)
-  // @ApiResponse(responses.badRequest)
-  // @ApiResponse(responses.unauthorized)
-  // @ApiResponse(responses.forbidden)
-  // @ApiResponse(responses.unprocessable)
-  // @ApiResponse(responses.internalError)
-  // findPreference(@Param('preference') preference: string, @Query('page') page: number, @Query('limit') limit: number) {
-  //   return this.userservice.findPreference(preference, page, limit);
-  // }
+  @Get('doctors/:preference')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  findPreference(@Param('specialtyID') specialtyID: string, @Query('page') page: number, @Query('limit') limit: number) {
+    return this.userservice.findPreference(specialtyID, page, limit);
+  }
 
 }

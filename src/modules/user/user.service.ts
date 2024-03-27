@@ -118,22 +118,32 @@ export class UserService {
   async findAll(page:number, limit:number) {
     if (page && limit) {
       const skip = (page - 1) * limit;
-      return this.prisma.doctor.findMany({
+      return this.prisma.doctorProfile.findMany({
         take: limit, 
         skip
       });
     }
     
-    return this.prisma.doctor.findMany();
+    return this.prisma.doctorProfile.findMany();
   }
 
-  // async findPreference(preference: string, page:number, limit:number) {
-  //   const skip = (page - 1) * limit;
-  //   return this.prisma.doctor.findMany({
-  //     take: limit, 
-  //     skip
-  //   });
-  // }
+  async findPreference(specialtyID: string, page:number, limit:number) {
+    if (page && limit) {
+    const skip = (page - 1) * limit;
+    return this.prisma.doctorProfile.findMany({
+      where: {
+        Specialtys: { some: { id: specialtyID } } 
+      },
+      take: limit, 
+      skip
+    });
+  }
+  return this.prisma.doctorProfile.findMany({
+    where: {
+      Specialtys: { some: { id: specialtyID } } 
+    }
+  });
+}
 
   async validateUser(data: any) {
     if (isUUID(data)) {
