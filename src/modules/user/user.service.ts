@@ -38,11 +38,11 @@ export class UserService {
   }
 
   async update(id: string, data: UpdatePutUserDTO) {
-    await this.validateUser(id);
-
     data.password = await bcrypt.hash(data.password, await bcrypt.genSalt());
 
     try {
+      await this.validateUser(id);
+
       const user = await this.prisma.user.update({
         where: { id },
         data,
@@ -73,8 +73,6 @@ export class UserService {
       role,
     }: UpdatePatchUserDTO,
   ) {
-    await this.validateUser(id);
-
     const data: any = {};
 
     for (const [key, value] of Object.entries({
@@ -104,6 +102,8 @@ export class UserService {
     }
 
     try {
+      await this.validateUser(id);
+
       const user = await this.prisma.user.update({
         where: { id },
         data,
