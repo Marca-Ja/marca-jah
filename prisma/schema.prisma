@@ -95,7 +95,7 @@ model Appointment {
   id String @id @unique @default(uuid())
   createdAt   DateTime  @default(now()) @map("created_at")
   status      Status?   @default(PENDING) @map("aproved_at")
-  payment     PaymentMethod? @map("payment_method")
+  paymentMethod     PaymentMethod? @map("payment_method")
   scheduledAt DateTime  @map("scheduled_at")
   deletedAt   DateTime? @map("deleted_at")
 
