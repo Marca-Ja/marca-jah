@@ -17,10 +17,11 @@ import { DoctorService } from './doctor.service';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { responses } from '../../global/docs/schema.docs';
+import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
 
 @Roles(Role.Doctor)
 @ApiBearerAuth('access')
-@UseGuards(AuthGuard, RoleGuard)
+@UseGuards(GoogleTokenValidation)
 @ApiTags('Doctor')
 @Controller('doctor')
 export class DoctorController {

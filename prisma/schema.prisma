@@ -70,13 +70,13 @@ enum ServicePreference {
 }
 
 model Doctor {
-  id            String          @id @unique @default(uuid())
-  email         String          @unique
+  id            String         @id @unique @default(uuid())
+  email         String         @unique
   firstName     String
   lastName      String
-  createdAt     DateTime        @default(now())
-  DoctorProfile DoctorProfile[]
-  Preference    Preference?     @relation(fields: [preferenceId], references: [id])
+  createdAt     DateTime       @default(now())
+  DoctorProfile DoctorProfile?
+  Preference    Preference?    @relation(fields: [preferenceId], references: [id])
   preferenceId  String?
   Appointment   Appointment[]
 
@@ -95,9 +95,8 @@ model DoctorProfile {
   preferences Preference[]
 
   appointments Appointment[]
-  DoctorId     String?       @map("doctors_id")
-  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, onUpdate: Cascade, fields: [doctorId])
-  doctorId     String?
+  doctorId     String? @unique
+  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, fields: [doctorId])
 
   @@map("doctor_profiles")
 }
@@ -110,13 +109,13 @@ model Appointment {
   scheduledAt DateTime  @map("scheduled_at")
   deletedAt   DateTime? @map("deleted_at")
 
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId          String         @map("user_id")
-  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorProfileId String?
+  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
 
   @@map("appointments")
 }
