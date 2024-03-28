@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { error } from 'console';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
 import { responses } from '../../global/docs/schema.docs';
@@ -17,14 +16,14 @@ import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from './doctor.service';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { AuthGuard } from '../../guards/auth.guard';
+import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
 
 @ApiTags('Doctor')
 @Roles(Role.Doctor)
-// @UseGuards(AuthGuard, RoleGuard)
+@UseGuards(GoogleTokenValidation)
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
-
 
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -37,7 +36,7 @@ export class DoctorController {
     try {
       return this.doctorService.findAll();
     } catch (e) {
-      throw new error(e.message);
+      // throw new error(e.message);
     }
   }
 
@@ -51,7 +50,6 @@ export class DoctorController {
   findOne(@Param('id') id: string) {
     return this.doctorService.findOne(id);
   }
-
 
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
