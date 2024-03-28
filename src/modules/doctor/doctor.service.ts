@@ -7,16 +7,11 @@ export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll() {
-    return this.prisma.doctor.findMany({
-      include: {
-        DoctorProfile: true,
-      },
-    });
+    return this.prisma.doctor.findMany();
   }
 
   async findOne(id: string) {
     return this.prisma.doctor.findUnique({
-      include: { DoctorProfile: true },
       where: { id },
     });
   }
@@ -24,7 +19,7 @@ export class DoctorService {
   async update(id: string, data: UpdateDoctorDto) {
     await this.exists(id);
 
-    return this.prisma.doctorProfile.update({
+    return this.prisma.doctor.update({
       data,
       where: { id },
     });
