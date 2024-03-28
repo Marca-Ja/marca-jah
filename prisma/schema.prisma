@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
@@ -43,24 +37,22 @@ model User {
   updatedAt    DateTime?     @updatedAt @map("update_at")
   deletedAt    DateTime?     @map("delete_at")
 
-  preferences  Preference[]
+  specialties  Specialty[]
   appointments Appointment[]
 
   @@map("users")
 }
 
-model Preference {
-  id         String    @id @unique @default(uuid())
-  preference String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  deletedAt  DateTime? @map("delete_at")
+model Specialty {
+  id        String    @id @unique @default(uuid())
+  specialty String
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("delete_at")
 
-  users           User[]
-  doctors         Doctor[]
-  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
-  doctorProfileId String?
+  users   User[]
+  doctors Doctor[]
 
-  @@map("preferences")
+  @@map("specialties")
 }
 
 enum ServicePreference {
@@ -70,36 +62,20 @@ enum ServicePreference {
 }
 
 model Doctor {
-  id            String          @id @unique @default(uuid())
-  email         String          @unique
-  firstName     String
-  lastName      String
-  createdAt     DateTime        @default(now())
-  DoctorProfile DoctorProfile[]
-  Preference    Preference?     @relation(fields: [preferenceId], references: [id])
-  preferenceId  String?
-  Appointment   Appointment[]
+  id                String            @id @unique @default(uuid())
+  email             String            @unique
+  firstName         String
+  lastName          String
+  university        String?
+  bornedAt          String?           @map("borned_at")
+  servicePreference ServicePreference @default(ALL) @map("service_preference")
+  createdAt         DateTime          @default(now())
+  specialty         Specialty?        @relation(fields: [specialtyId], references: [id])
+  specialtyId       String?
+  Appointment       Appointment[]
+  role              String            @default("Doctor")
 
   @@map("doctors")
-}
-
-model DoctorProfile {
-  id                String            @id @unique @default(uuid())
-  university        String
-  bornedAt          DateTime          @map("borned_at")
-  servicePreference ServicePreference @default(ALL) @map("service_preference")
-  role              String            @default("Doctor")
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("update_at")
-
-  preferences Preference[]
-
-  appointments Appointment[]
-  DoctorId     String?       @map("doctors_id")
-  Doctor       Doctor?       @relation(references: [id], onDelete: Cascade, onUpdate: Cascade, fields: [doctorId])
-  doctorId     String?
-
-  @@map("doctor_profiles")
 }
 
 model Appointment {
@@ -113,10 +89,8 @@ model Appointment {
   doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
 
-  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId          String         @map("user_id")
-  DoctorProfile   DoctorProfile? @relation(fields: [doctorProfileId], references: [id])
-  doctorProfileId String?
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @map("user_id")
 
   @@map("appointments")
 }

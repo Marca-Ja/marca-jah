@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { MaritalState } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
@@ -11,11 +12,10 @@ import {
   MinLength,
 } from 'class-validator';
 import {
-  IsWithinLast130Years,
   IsOlderThan18,
+  IsWithinLast130Years,
 } from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDTO {
   @ApiProperty({ example: 'Jhon' })
@@ -102,3 +102,8 @@ export class CreateUserDTO {
   @IsEnum(Role)
   role: string;
 }
+
+// function getMinBirthDate(): Date {
+//   const today = new Date();
+//   return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+// }
