@@ -36,7 +36,7 @@ export class DoctorService {
 
   async exists(id: string) {
     if (!(await this.prisma.doctor.count({ where: { id } }))) {
-      throw new NotFoundException(`Doctor not found`);
+      throw new NotFoundException('Médico não encontrado');
     }
   }
 }

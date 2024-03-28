@@ -1,5 +1,6 @@
 import { ServicePreference } from '@prisma/client';
 
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDateString,
   IsEmail,
@@ -9,7 +10,6 @@ import {
   MinLength,
 } from 'class-validator';
 import { Role } from '../../../enum/role.enum';
-import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDoctorDto {
   @ApiProperty({ example: 'Jhon' })
@@ -43,5 +43,5 @@ export class CreateDoctorDto {
   @ApiProperty()
   @IsOptional()
   @IsEnum(Role)
-  enum: string;
+  role: string;
 }
