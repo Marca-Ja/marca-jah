@@ -16,7 +16,6 @@ import { Role } from '../../enum/role.enum';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
 import { Roles } from '../../decorators/roles.decorator';
-import { GoogleOAuthGuard } from '../../guards/google-oauth.guard';
 
 @ApiTags('Appointment')
 @Controller('appointment')
@@ -37,9 +36,8 @@ export class AppointmentController {
     return this.appointmentService.create(data);
   }
 
-  //TODO: Verificar autenticação com GoogleOAuthGuard
-  // @Roles(Role.Doctor)
-  // @UseGuards(GoogleOAuthGuard, RoleGuard)
+  @Roles(Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -63,12 +61,11 @@ export class AppointmentController {
   @ApiResponse(responses.internalError)
   @Get('user/:id')
   findAllByUser(@Param('id') id: string) {
-    console.log(id);
     return this.appointmentService.findAllAppointmentsbyUser(id);
   }
 
   @Roles(Role.Doctor)
-  @UseGuards(GoogleOAuthGuard, RoleGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -80,8 +77,8 @@ export class AppointmentController {
   findAllByDoctor(@Param('id') id: string) {
     return this.appointmentService.findAllAppointmentsbyDoctor(id);
   }
-  //TODO: Verificar autenticação com GoogleOAuthGuard
-  @Roles(Role.User)
+
+  @Roles(Role.User, Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
