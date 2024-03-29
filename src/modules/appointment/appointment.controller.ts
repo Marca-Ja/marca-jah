@@ -1,17 +1,30 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { responses } from '../../global/docs/schema.docs';
 
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { GoogleOAuthGuard } from '../../guards/google-oauth.guard';
 
 @ApiTags('Appointment')
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  // @Roles(Role.User)
-  // @UseGuards(AuthGuard, RoleGuard)
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -24,6 +37,9 @@ export class AppointmentController {
     return this.appointmentService.create(data);
   }
 
+  //TODO: Verificar autenticação com GoogleOAuthGuard
+  // @Roles(Role.Doctor)
+  // @UseGuards(GoogleOAuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -36,6 +52,8 @@ export class AppointmentController {
     return this.appointmentService.findAll();
   }
 
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -49,6 +67,8 @@ export class AppointmentController {
     return this.appointmentService.findAllAppointmentsbyUser(id);
   }
 
+  @Roles(Role.Doctor)
+  @UseGuards(GoogleOAuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -60,7 +80,9 @@ export class AppointmentController {
   findAllByDoctor(@Param('id') id: string) {
     return this.appointmentService.findAllAppointmentsbyDoctor(id);
   }
-
+  //TODO: Verificar autenticação com GoogleOAuthGuard
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
