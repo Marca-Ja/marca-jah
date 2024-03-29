@@ -25,7 +25,6 @@ import { AuthGuard } from '../../guards/auth.guard';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
-
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -51,7 +50,6 @@ export class DoctorController {
   findOne(@Param('id') id: string) {
     return this.doctorService.findOne(id);
   }
-
 
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
