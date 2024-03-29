@@ -8,6 +8,7 @@ import { DoctorService } from '../doctor/doctor.service';
 import { PrismaService } from '../../infra/prisma.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AppointmentModule } from '../appointment/appointment.module';
 
 @Module({
   imports: [
@@ -15,6 +16,8 @@ import { JwtModule } from '@nestjs/jwt';
     PrismaModule,
     DoctorModule,
     forwardRef(() => UserModule),
+    JwtModule.register({ secret: process.env.JWT_SECRET }),
+    forwardRef(() => AppointmentModule),
     JwtModule.register({ secret: process.env.JWT_SECRET }),
   ],
   controllers: [AuthController],

@@ -17,6 +17,19 @@ enum MaritalState {
   IN_CIVIL_UNION
 }
 
+enum Status {
+  APROVED
+  CANCELED
+  PENDING
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+  CASH
+}
+
 model User {
   id           String        @id @unique @default(uuid())
   name         String
@@ -80,9 +93,9 @@ model Doctor {
 
 model Appointment {
   id String @id @unique @default(uuid())
-
   createdAt   DateTime  @default(now()) @map("created_at")
-  aprovedAt   DateTime? @map("aproved_at")
+  status      Status?   @default(PENDING) @map("aproved_at")
+  paymentMethod     PaymentMethod? @map("payment_method")
   scheduledAt DateTime  @map("scheduled_at")
   deletedAt   DateTime? @map("deleted_at")
 
