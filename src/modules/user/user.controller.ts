@@ -38,7 +38,6 @@ export class UserController {
     return this.userservice.list();
   }
 
-  @UseGuards(RoleGuard)
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
