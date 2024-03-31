@@ -20,7 +20,7 @@ import { AuthGuard } from '../../guards/auth.guard';
 
 @ApiTags('Doctor')
 @Roles(Role.Doctor)
-// @UseGuards(AuthGuard, RoleGuard)
+@UseGuards(AuthGuard, RoleGuard)
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
@@ -48,7 +48,7 @@ export class DoctorController {
   @ApiResponse(responses.internalError)
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.doctorService.findOne(id);
+    return this.doctorService.findDoctor(id);
   }
 
   @ApiBearerAuth('access')

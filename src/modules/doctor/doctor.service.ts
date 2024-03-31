@@ -14,7 +14,7 @@ export class DoctorService {
     });
   }
 
-  async findOne(id: string) {
+  async findDoctor(id: string) {
     return this.prisma.doctor.findUnique({
       where: { id },
     });

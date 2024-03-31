@@ -1,60 +1,45 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
+
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   private issuer = 'login';
-  private audience = 'users';
+  private audience: 'doctor' | 'user' = 'user';
 
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
   ) {}
 
-  async googleLogin(req) {
+  async googleLogin(req: any) {
     if (!req.user) {
-      return 'No user from google';
-    }
-    const { email, firstName, lastName } = req.user;
-
-    let session = await this.prismaService.doctor.findFirst({
-      where: { email },
-    });
-
-    try {
-      if (!session) {
-        session = await this.prismaService.doctor.create({
-          data: {
-            email,
-            firstName,
-            lastName,
-          },
-        });
-      }
-    } catch (error) {
-      console.log(error.message);
+      throw new BadRequestException('Unauthenticated');
     }
 
-    return {
-      message: 'User information from google',
-      user: req.user,
-    };
+    const userExists = await this.findDoctorByEmail(req.user.email);
+    if (!userExists) {
+      return this.registerDoctor(req.user);
+    }
+    const accessToken = this.createToken(userExists);
+
+    return { accessToken };
   }
 
-  createToken(user: User) {
+  createToken(user) {
     return {
       accessToken: this.jwtService.sign(
         {
           name: user.name,
           email: user.email,
+          role: user.role,
         },
         {
           expiresIn: '7 days',
@@ -98,5 +83,37 @@ export class AuthService {
     } catch (error) {
       throw new BadRequestException(error.message);
     }
+  }
+
+  async registerDoctor(req) {
+    if (!req) {
+      return 'No user from google';
+    }
+    const { email, firstName, lastName } = req;
+    try {
+      const doctor = await this.prismaService.doctor.create({
+        data: {
+          email,
+          firstName,
+          lastName,
+        },
+      });
+
+      return this.createToken(doctor);
+    } catch {
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async findDoctorByEmail(email) {
+    const doctor = this.prismaService.doctor.findFirst({
+      where: { email },
+    });
+
+    if (!doctor) {
+      return null;
+    }
+
+    return doctor;
   }
 }

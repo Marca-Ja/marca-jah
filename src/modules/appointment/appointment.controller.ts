@@ -1,31 +1,42 @@
 import {
-  Body,
   Controller,
   Get,
-  Param,
-  Patch,
   Post,
-  Put,
-  Query,
+  Body,
+  Param,
+  Delete,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from '../../decorators/roles.decorator';
-import { Role } from '../../enum/role.enum';
+import { AppointmentService } from './appointment.service';
+import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { responses } from '../../global/docs/schema.docs';
+
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from '../../enum/role.enum';
 import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
-import { CreateUserDTO } from './DTO/create-user.dto';
-import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
-import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
-import { UserService } from './user.service';
+import { Roles } from '../../decorators/roles.decorator';
 
-@ApiTags('User')
-@Roles(Role.User)
-@Controller('user')
-export class UserController {
-  constructor(private readonly userservice: UserService) {}
+@ApiTags('Appointment')
+@Controller('appointment')
+export class AppointmentController {
+  constructor(private readonly appointmentService: AppointmentService) {}
 
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth('access')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Post()
+  create(@Body() data: CreateAppointmentDto) {
+    return this.appointmentService.create(data);
+  }
+
+  @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
@@ -35,21 +46,11 @@ export class UserController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get()
-  async list() {
-    return this.userservice.list();
+  findAll() {
+    return this.appointmentService.findAll();
   }
 
-  @ApiResponse(responses.created)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Post()
-  async create(@Body() data: CreateUserDTO) {
-    return this.userservice.create(data);
-  }
-
+  @Roles(Role.User)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
@@ -58,11 +59,12 @@ export class UserController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Put(':id')
-  async update(@Body() data: UpdatePutUserDTO, @Param('id') id: string) {
-    return this.userservice.update(id, data);
+  @Get('user/:id')
+  findAllByUser(@Param('id') id: string) {
+    return this.appointmentService.findAllAppointmentsbyUser(id);
   }
 
+  @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
@@ -71,15 +73,13 @@ export class UserController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Patch(':id')
-  async updatePartial(
-    @Body() data: UpdatePatchUserDTO,
-    @Param('id') id: string,
-  ) {
-    return this.userservice.updatePartial(id, data);
+  @Get('doctor/:id')
+  findAllByDoctor(@Param('id') id: string) {
+    return this.appointmentService.findAllAppointmentsbyDoctor(id);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.User, Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -87,20 +87,8 @@ export class UserController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Get('doctors')
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.userservice.findAll(page, limit);
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.appointmentService.remove(id);
   }
-
-  @Get('doctors/:preference')
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  findPreference(@Param('specialtyID') specialtyID: string, @Query('page') page: number, @Query('limit') limit: number) {
-    return this.userservice.findPreference(specialtyID, page, limit);
-  }
-
 }
