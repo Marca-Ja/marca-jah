@@ -15,8 +15,7 @@ export class DoctorService {
   }
 
   async findOne(id: string) {
-    return this.prisma.doctor.findFirst({
-      include: { DoctorProfile: true },
+    return this.prisma.doctor.findUnique({
       where: { id },
     });
   }
@@ -36,7 +35,7 @@ export class DoctorService {
 
   async exists(id: string) {
     if (!(await this.prisma.doctor.count({ where: { id } }))) {
-      throw new NotFoundException(`Doctor not found`);
+      throw new NotFoundException('Médico não encontrado');
     }
   }
 }
