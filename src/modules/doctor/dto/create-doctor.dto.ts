@@ -29,7 +29,10 @@ export class CreateDoctorDto {
   @IsString()
   university: string;
 
-  @ApiProperty({ example: '1980/09/12' })
+  @ApiProperty({
+    example: '1980/09/12',
+    description: 'A data deve ser no formato AAAA/MM/DD',
+  })
   @IsDateString()
   bornedAt: string;
 

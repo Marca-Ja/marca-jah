@@ -8,7 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { error } from 'console';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
@@ -25,6 +30,10 @@ import { AuthGuard } from '../../guards/auth.guard';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
+  @ApiOperation({
+    summary: 'Retorna todos os médicos',
+    description: 'Essa rota lista todos os médicos cadastrados',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -40,6 +49,11 @@ export class DoctorController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Retorna médico específico',
+    description:
+      'Essa rota retorna um médico específico com base no seu ID (identificação única)',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -51,6 +65,10 @@ export class DoctorController {
     return this.doctorService.findDoctor(id);
   }
 
+  @ApiOperation({
+    summary: 'Atualização do cadastro',
+    description: 'Essa rota atualiza os dados do médico cadastrado autenticado',
+  })
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -63,6 +81,10 @@ export class DoctorController {
     return this.doctorService.update(id, data);
   }
 
+  @ApiOperation({
+    summary: 'Remoção de um médico',
+    description: 'Essa rota deleta um médico específico do banco de dados',
+  })
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)

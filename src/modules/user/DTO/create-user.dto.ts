@@ -33,7 +33,10 @@ export class CreateUserDTO {
   @MinLength(3)
   lastName: string;
 
-  @ApiProperty({ example: '1980/09/12' })
+  @ApiProperty({
+    example: '1980/09/12',
+    description: 'A data deve ser no formato AAAA/MM/DD',
+  })
   @Type(() => Date)
   @IsDate()
   @IsOlderThan18({
