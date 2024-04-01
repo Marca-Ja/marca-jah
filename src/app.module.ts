@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import {
   ThrottlerGuard,
@@ -11,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { DoctorModule } from './modules/doctor/doctor.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -24,10 +23,10 @@ import { ConfigModule } from '@nestjs/config';
     ] as ThrottlerOptions[]),
     DoctorModule,
     AuthModule,
+    AppointmentModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
