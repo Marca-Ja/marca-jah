@@ -92,13 +92,15 @@ export class UserController {
     return this.userservice.findAll(page, limit);
   }
 
-  @Get('doctors/:preference')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
+  @Get('doctors/:specialtyID')
   findPreference(@Param('specialtyID') specialtyID: string, @Query('page') page: number, @Query('limit') limit: number) {
     return this.userservice.findPreference(specialtyID, page, limit);
   }

@@ -118,31 +118,62 @@ export class UserService {
   async findAll(page:number, limit:number) {
     if (page && limit) {
       const skip = (page - 1) * limit;
-      return this.prisma.doctorProfile.findMany({
+      return this.prisma.doctor.findMany({
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          servicePreference: true,
+          university: true,
+          specialtyId: true
+        },
         take: limit, 
         skip
       });
     }
     
-    return this.prisma.doctorProfile.findMany();
+    return this.prisma.doctor.findMany({
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        servicePreference: true,
+        university: true,
+        specialtyId: true
+      }
+    });
   }
 
   async findPreference(specialtyID: string, page:number, limit:number) {
-    if (page && limit) {
-    const skip = (page - 1) * limit;
-    return this.prisma.doctorProfile.findMany({
-      where: {
-        Specialtys: { some: { id: specialtyID } } 
-      },
-      take: limit, 
-      skip
-    });
-  }
-  return this.prisma.doctorProfile.findMany({
-    where: {
-      Specialtys: { some: { id: specialtyID } } 
-    }
-  });
+    if (specialtyID) {
+      if (page && limit) {
+        const skip = (page - 1) * limit;
+        return this.prisma.doctor.findMany({
+          where: { specialtyId: specialtyID },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            servicePreference: true,
+            university: true,
+            specialtyId: true
+          },
+          take: limit, 
+          skip
+        });
+      }
+      return this.prisma.doctor.findMany({
+        where: { specialtyId: specialtyID },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          servicePreference: true,
+          university: true,
+          specialtyId: true
+        }
+      });
+    } 
 }
 
   async validateUser(data: any) {
