@@ -105,8 +105,3 @@ export class CreateUserDTO {
   @IsEnum(Role)
   role: string;
 }
-
-// function getMinBirthDate(): Date {
-//   const today = new Date();
-//   return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-// }
