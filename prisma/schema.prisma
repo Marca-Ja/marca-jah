@@ -30,6 +30,12 @@ enum PaymentMethod {
   CASH
 }
 
+enum ServicePreference {
+  ONLINE
+  PRESENCIAL
+  ALL
+}
+
 model User {
   id           String        @id @unique @default(uuid())
   name         String
@@ -42,7 +48,7 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     String?     @map("borned_at")
+  bornedAt     String?       @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
@@ -54,24 +60,6 @@ model User {
   appointments Appointment[]
 
   @@map("users")
-}
-
-model Specialty {
-  id        String    @id @unique @default(uuid())
-  specialty String
-  createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("delete_at")
-
-  users   User[]
-  doctors Doctor[]
-
-  @@map("specialties")
-}
-
-enum ServicePreference {
-  ONLINE
-  PRESENCIAL
-  ALL
 }
 
 model Doctor {
@@ -91,13 +79,25 @@ model Doctor {
   @@map("doctors")
 }
 
+model Specialty {
+  id        String    @id @unique @default(uuid())
+  specialty String
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("delete_at")
+
+  users   User[]
+  doctors Doctor[]
+
+  @@map("specialties")
+}
+
 model Appointment {
-  id String @id @unique @default(uuid())
-  createdAt   DateTime  @default(now()) @map("created_at")
-  status      Status?   @default(PENDING) @map("aproved_at")
-  paymentMethod     PaymentMethod? @map("payment_method")
-  scheduledAt DateTime  @map("scheduled_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id            String         @id @unique @default(uuid())
+  createdAt     DateTime       @default(now()) @map("created_at")
+  status        Status?        @default(PENDING) @map("aproved_at")
+  paymentMethod PaymentMethod? @map("payment_method")
+  scheduledAt   DateTime       @map("scheduled_at")
+  deletedAt     DateTime?      @map("deleted_at")
 
   doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
