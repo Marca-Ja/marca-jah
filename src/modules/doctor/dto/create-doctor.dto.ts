@@ -37,7 +37,7 @@ export class CreateDoctorDto {
   @IsDateString()
   updatedAt: string;
 
-  @ApiProperty({ examples: ['Cardiologista', 'Clínico Geral', 'Pediatra'] })
+  @ApiProperty({ enum: ['ONLINE', 'PRESENCIAL', 'ALL'] })
   servicePreference: ServicePreference;
 
   @ApiProperty()
