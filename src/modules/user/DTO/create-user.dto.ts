@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { MaritalState } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -19,17 +20,17 @@ import { Role } from '../../../enum/role.enum';
 
 export class CreateUserDTO {
   @ApiProperty({ example: 'Jhon' })
-  @IsString()
+  @IsString({ message: "A propriedade 'name' deve ser uma String" })
   @MinLength(3)
   name: string;
 
   @ApiProperty()
   @IsOptional()
-  @IsString()
+  @IsString({ message: "A propriedade 'socialName' deve ser uma String" })
   socialName: string;
 
   @ApiProperty({ example: 'Doe' })
-  @IsString()
+  @IsString({ message: "A propriedade 'lastName' deve ser uma String" })
   @MinLength(3)
   lastName: string;
 
@@ -54,7 +55,7 @@ export class CreateUserDTO {
 
   @ApiProperty({
     example: 'jhonDoe@email.com',
-    description: 'O E-mail é um campo único no banco de dados',
+    description: "O campo 'email' é único no banco de dados",
   })
   @IsEmail()
   email: string;
@@ -77,12 +78,18 @@ export class CreateUserDTO {
   postalCode: string;
 
   @ApiProperty({ example: 'Macapá' })
+  @IsOptional()
+  @IsString({ message: "A propriedade 'city' deve ser uma String" })
   city: string;
 
   @ApiProperty({ example: 'AP' })
+  @IsOptional()
+  @IsString({ message: "A propriedade 'state' deve ser uma String" })
   state: string;
 
   @ApiProperty({ example: 'Rua Barão de Mauá' })
+  @IsOptional()
+  @IsString({ message: "A propriedade 'street' deve ser uma String" })
   street: string;
 
   @ApiProperty({
@@ -95,9 +102,16 @@ export class CreateUserDTO {
       'IN_CIVIL_UNION',
     ],
   })
+  @IsOptional()
+  @IsEnum(MaritalState, {
+    message:
+      'Estado civil inválido. Escolha entre: SINGLE, MARRIED, DIVORCED, WINDOWED, SEPARATED, IN_CIVIL_UNION',
+  })
   maritalState: MaritalState;
 
-  @ApiProperty()
+  @ApiProperty({ example: true })
+  @IsOptional()
+  @IsBoolean({ message: "A propriedade 'receiveNews' deve ser um Boolean" })
   receiveNews: boolean;
 
   @ApiProperty({ enum: ['User', 'Doctor'] })
