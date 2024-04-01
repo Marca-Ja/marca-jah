@@ -1,17 +1,29 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { responses } from '../../global/docs/schema.docs';
 
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Role } from '../../enum/role.enum';
+import { AuthGuard } from '../../guards/auth.guard';
+import { RoleGuard } from '../../guards/role.guard';
+import { Roles } from '../../decorators/roles.decorator';
 
 @ApiTags('Appointment')
 @Controller('appointment')
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  // @Roles(Role.User)
-  // @UseGuards(AuthGuard, RoleGuard)
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -24,6 +36,8 @@ export class AppointmentController {
     return this.appointmentService.create(data);
   }
 
+  @Roles(Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -36,6 +50,8 @@ export class AppointmentController {
     return this.appointmentService.findAll();
   }
 
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -45,10 +61,11 @@ export class AppointmentController {
   @ApiResponse(responses.internalError)
   @Get('user/:id')
   findAllByUser(@Param('id') id: string) {
-    console.log(id);
     return this.appointmentService.findAllAppointmentsbyUser(id);
   }
 
+  @Roles(Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -61,6 +78,8 @@ export class AppointmentController {
     return this.appointmentService.findAllAppointmentsbyDoctor(id);
   }
 
+  @Roles(Role.User, Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)

@@ -10,7 +10,7 @@ export class DoctorService {
     return this.prisma.doctor.findMany();
   }
 
-  async findOne(id: string) {
+  async findDoctor(id: string) {
     return this.prisma.doctor.findUnique({
       where: { id },
     });

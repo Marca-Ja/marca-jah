@@ -14,9 +14,8 @@ import { AppointmentModule } from '../appointment/appointment.module';
   imports: [
     PassportModule,
     PrismaModule,
-    DoctorModule,
+    forwardRef(() => DoctorModule),
     forwardRef(() => UserModule),
-    JwtModule.register({ secret: process.env.JWT_SECRET }),
     forwardRef(() => AppointmentModule),
     JwtModule.register({ secret: process.env.JWT_SECRET }),
   ],
