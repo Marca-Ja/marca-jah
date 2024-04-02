@@ -62,6 +62,24 @@ model User {
   @@map("users")
 }
 
+model Specialty {
+  id        String    @id @unique @default(uuid())
+  specialty String
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("delete_at")
+
+  users   User[]
+  doctors Doctor[]
+
+  @@map("specialties")
+}
+
+enum ServicePreference {
+  ONLINE
+  PRESENCIAL
+  ALL
+}
+
 model Doctor {
   id                String            @id @unique @default(uuid())
   email             String            @unique
@@ -79,18 +97,6 @@ model Doctor {
   @@map("doctors")
 }
 
-model Specialty {
-  id        String    @id @unique @default(uuid())
-  specialty String
-  createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("delete_at")
-
-  users   User[]
-  doctors Doctor[]
-
-  @@map("specialties")
-}
-
 model Appointment {
   id            String         @id @unique @default(uuid())
   createdAt     DateTime       @default(now()) @map("created_at")
@@ -99,8 +105,8 @@ model Appointment {
   scheduledAt   DateTime       @map("scheduled_at")
   deletedAt     DateTime?      @map("deleted_at")
 
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @map("user_id")
