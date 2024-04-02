@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { PrismaService } from '../../infra/prisma.service';
-import { isWithinInterval, parseISO, getDay } from 'date-fns';
+import { isWithinInterval, getDay } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
@@ -65,6 +65,7 @@ export class AppointmentService {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
     });
+
     if (!appointment) {
       throw new NotFoundException('Consulta não encontrada');
     }
