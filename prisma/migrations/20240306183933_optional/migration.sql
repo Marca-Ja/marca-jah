@@ -1,0 +1,11 @@
+-- AlterTable
+ALTER TABLE `users` MODIFY `city` VARCHAR(191) NULL,
+    MODIFY `state` VARCHAR(191) NULL,
+    MODIFY `borned_at` VARCHAR(191) NULL,
+    MODIFY `marital_state` ENUM('SINGLE', 'MARRIED', 'DIVORCED', 'WINDOWED', 'SEPARATED', 'IN_CIVIL_UNION') NULL,
+    MODIFY `receive_news` BOOLEAN NULL DEFAULT true,
+    MODIFY `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    MODIFY `postalCode` VARCHAR(191) NULL,
+    MODIFY `socialName` VARCHAR(191) NULL,
+    MODIFY `street` VARCHAR(191) NULL,
+    MODIFY `cellphone` VARCHAR(191) NULL;

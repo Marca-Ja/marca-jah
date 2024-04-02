@@ -1,11 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -22,37 +17,55 @@ enum MaritalState {
   IN_CIVIL_UNION
 }
 
-model User {
-  id           String       @id @unique @default(uuid())
-  name         String
-  email        String       @unique
-  password     String
-  celphone     String
-  city         String
-  state        String
-  bornedAt     String       @map("borned_at")
-  maritalState MaritalState @map("marital_state")
-  receiveNews  Boolean      @default(true) @map("receive_news")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime?    @updatedAt @map("update_at")
-  deletedAt    DateTime?    @map("delete_at")
+enum Status {
+  APROVED
+  CANCELED
+  PENDING
+}
 
-  preferences  Preference[]
+enum PaymentMethod {
+  CREDIT_CARD
+  DEBIT_CARD
+  PIX
+  CASH
+}
+
+model User {
+  id           String        @id @unique @default(uuid())
+  name         String
+  socialName   String?
+  lastName     String
+  email        String        @unique
+  password     String
+  cellphone    String?
+  postalCode   String?
+  city         String?
+  state        String?
+  street       String?
+  bornedAt     String?     @map("borned_at")
+  maritalState MaritalState? @map("marital_state")
+  receiveNews  Boolean?      @default(true) @map("receive_news")
+  role         String        @default("User")
+  createdAt    DateTime?     @default(now()) @map("created_at")
+  updatedAt    DateTime?     @updatedAt @map("update_at")
+  deletedAt    DateTime?     @map("delete_at")
+
+  specialties  Specialty[]
   appointments Appointment[]
 
   @@map("users")
 }
 
-model Preference {
-  id         String    @id @unique @default(uuid())
-  preference String
-  createdAt  DateTime  @default(now()) @map("created_at")
-  deletedAt  DateTime? @map("delete_at")
+model Specialty {
+  id        String    @id @unique @default(uuid())
+  specialty String
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("delete_at")
 
   users   User[]
   doctors Doctor[]
 
-  @@map("preferences")
+  @@map("specialties")
 }
 
 enum ServicePreference {
@@ -63,39 +76,26 @@ enum ServicePreference {
 
 model Doctor {
   id                String            @id @unique @default(uuid())
-  name              String
-  unervisity        String
-  bornedAt          DateTime          @map("borned_at")
+  email             String            @unique
+  firstName         String
+  lastName          String
+  university        String?
+  bornedAt          String?           @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
-  createdAt         DateTime          @default(now()) @map("created_at")
-  updatedAt         DateTime          @updatedAt @map("update_at")
-
-  preferences Preference[]
-
-  sessions     SessionToDoctor[]
-  appointments Appointment[]
+  createdAt         DateTime          @default(now())
+  specialty         Specialty?        @relation(fields: [specialtyId], references: [id])
+  specialtyId       String?
+  Appointment       Appointment[]
+  role              String            @default("Doctor")
 
   @@map("doctors")
 }
 
-model SessionToDoctor {
-  id           String    @id @unique @default(uuid())
-  googleUserId String
-  token        String
-  expiredAt    DateTime?
-  createdAt    DateTime  @default(now())
-
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  doctorId String @map("session_to_doctor_doctor_id")
-
-  @@map("sessions_to_doctors")
-}
-
 model Appointment {
   id String @id @unique @default(uuid())
-
   createdAt   DateTime  @default(now()) @map("created_at")
-  aprovedAt   DateTime? @map("aproved_at")
+  status      Status?   @default(PENDING) @map("aproved_at")
+  paymentMethod     PaymentMethod? @map("payment_method")
   scheduledAt DateTime  @map("scheduled_at")
   deletedAt   DateTime? @map("deleted_at")
 
