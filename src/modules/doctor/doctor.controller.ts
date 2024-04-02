@@ -8,7 +8,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { error } from 'console';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
@@ -25,6 +30,10 @@ export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
   @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Retorna todos os médicos',
+    description: 'Essa rota lista todos os médicos cadastrados.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -41,6 +50,11 @@ export class DoctorController {
   }
 
   @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Retorna médico específico',
+    description:
+      'Essa rota retorna um médico específico com base no seu ID (identificação única).',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -55,6 +69,11 @@ export class DoctorController {
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Atualização do cadastro',
+    description:
+      'Essa rota atualiza os dados do médico cadastrado autenticado.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -68,6 +87,10 @@ export class DoctorController {
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Remoção de um médico',
+    description: 'Essa rota deleta um médico específico do banco de dados.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -82,6 +105,11 @@ export class DoctorController {
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna uma consulta específica',
+    description:
+      'Essa rota retorna uma consulta específica de acordo com sua ID (identificação única).',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -96,6 +124,11 @@ export class DoctorController {
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Confirmação de consulta',
+    description:
+      'Essa rota permite ao médico aceitar ou recusar as consultas designadas a ele.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)

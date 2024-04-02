@@ -27,7 +27,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Cadastro de um médico',
     description:
-      'Essa rota cria um novo médico no banco de dados a partir de seu cadastro pelo google',
+      'Essa rota cria um novo médico no banco de dados a partir de seu cadastro pelo google.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -42,7 +42,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Redirecionamento do google para login',
     description:
-      'Essa rota redireciona um médico e retorna seu token de acesso',
+      'Essa rota redireciona um médico e retorna seu token de acesso.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -56,8 +56,8 @@ export class AuthController {
   }
 
   @ApiOperation({
-    summary: 'Login de um médico',
-    description: 'Essa rota faz o login de um médico',
+    summary: 'Login de um usuário',
+    description: 'Essa rota faz o login de um usuário.',
   })
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
@@ -74,7 +74,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Verificação de token',
     description:
-      'Essa rota verifica e retorna informações do médico autenticado',
+      'Essa rota verifica e retorna informações do médico autenticado.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)

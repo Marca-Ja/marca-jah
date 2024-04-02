@@ -33,7 +33,7 @@ export class AppointmentController {
   @ApiOperation({
     summary: 'Cadastro de uma consulta',
     description:
-      'Essa rota cria uma consulta para um usuário. Ela precisa ser aceita ou negada por um médico',
+      'Essa rota cria uma consulta para um usuário. Ela precisa ser aceita ou negada por um médico.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -52,7 +52,7 @@ export class AppointmentController {
   @ApiOperation({
     summary: 'Retorna todos os pedidos de consultas de um médico',
     description:
-      'Essa rota lista todas as consultas feitas por usuários para um médico as serem aceitas ou negadas',
+      'Essa rota lista todas as consultas feitas por usuários para um médico as serem aceitas ou negadas.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -70,7 +70,7 @@ export class AppointmentController {
   @ApiOperation({
     summary: 'Consultas de um usuário',
     description:
-      'Essa rota retorna todas as consultas de um usuário específico',
+      'Essa rota retorna todas as consultas de um usuário específico.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
