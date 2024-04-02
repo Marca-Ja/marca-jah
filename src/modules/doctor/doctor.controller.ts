@@ -19,12 +19,12 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { AuthGuard } from '../../guards/auth.guard';
 
 @ApiTags('Doctor')
-@Roles(Role.Doctor)
-@UseGuards(AuthGuard, RoleGuard)
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
+
+  @UseGuards(AuthGuard)
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -40,6 +40,7 @@ export class DoctorController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -50,7 +51,8 @@ export class DoctorController {
   findOne(@Param('id') id: string) {
     return this.doctorService.findDoctor(id);
   }
-
+  @Roles(Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -62,7 +64,8 @@ export class DoctorController {
   update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
     return this.doctorService.update(id, data);
   }
-
+  @Roles(Role.Doctor)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
