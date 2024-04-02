@@ -50,35 +50,6 @@ export class AppointmentController {
     return this.appointmentService.findAll();
   }
 
-  @Roles(Role.User)
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiBearerAuth('access')
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Get('user/:id')
-  findAllByUser(@Param('id') id: string) {
-    return this.appointmentService.findAllAppointmentsbyUser(id);
-  }
-
-  @Roles(Role.Doctor)
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiBearerAuth('access')
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Get('doctor/:id')
-  findAllByDoctor(@Param('id') id: string) {
-    return this.appointmentService.findAllAppointmentsbyDoctor(id);
-  }
-
-
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
@@ -87,8 +58,8 @@ export class AppointmentController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':appointmentId')
+  remove(@Param('appointmentId') id: string) {
     return this.appointmentService.remove(id);
   }
 }

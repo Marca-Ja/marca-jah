@@ -31,36 +31,8 @@ export class AppointmentService {
     return this.prisma.appointment.findMany();
   }
 
-  async findAllAppointmentsbyUser(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-    const data = await this.prisma.appointment.findMany({
-      where: {
-        userId: id,
-      },
-    });
 
-    return data;
-  }
-  async findAllAppointmentsbyDoctor(id: string) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { id },
-    });
-    if (!doctor) {
-      throw new NotFoundException('Médico não encontrado');
-    }
-    const data = await this.prisma.appointment.findMany({
-      where: {
-        doctorId: id,
-      },
-    });
-
-    return data;
-  }
+  
 
   async remove(id: string) {
     const appointment = await this.prisma.appointment.findUnique({
