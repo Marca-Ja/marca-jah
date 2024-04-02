@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { PrismaService } from '../../infra/prisma.service';
+import { isWithinInterval, parseISO, getDay } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
@@ -23,6 +24,22 @@ export class AppointmentService {
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
+    const appointmentDate = data.scheduledAt;
+  console.log(appointmentDate)
+  const dayOfWeek = getDay(appointmentDate);
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    throw new BadRequestException('Agendamentos são permitidos apenas em dias úteis.');
+  }
+
+    const startBusinessHours = new Date(appointmentDate);
+    startBusinessHours.setHours(9, 0, 0, 0); 
+
+    const endBusinessHours = new Date(appointmentDate);
+    endBusinessHours.setHours(18, 0, 0, 0);
+
+    if (!isWithinInterval(appointmentDate, { start: startBusinessHours, end: endBusinessHours })) {
+      throw new BadRequestException('Agendamentos devem ser realizados dentro do horário comercial (9h às 18h).');
+    }
 
     return this.prisma.appointment.create({ data });
   }
@@ -31,36 +48,8 @@ export class AppointmentService {
     return this.prisma.appointment.findMany();
   }
 
-  async findAllAppointmentsbyUser(id: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-    });
-    if (!user) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-    const data = await this.prisma.appointment.findMany({
-      where: {
-        userId: id,
-      },
-    });
 
-    return data;
-  }
-  async findAllAppointmentsbyDoctor(id: string) {
-    const doctor = await this.prisma.doctor.findUnique({
-      where: { id },
-    });
-    if (!doctor) {
-      throw new NotFoundException('Médico não encontrado');
-    }
-    const data = await this.prisma.appointment.findMany({
-      where: {
-        doctorId: id,
-      },
-    });
-
-    return data;
-  }
+  
 
   async remove(id: string) {
     const appointment = await this.prisma.appointment.findUnique({
@@ -69,8 +58,9 @@ export class AppointmentService {
     if (!appointment) {
       throw new NotFoundException('Consulta não encontrada');
     }
-    await this.prisma.appointment.delete({
+    await this.prisma.appointment.update({
       where: { id },
+      data: {deletedAt: new Date()}
     });
 
     return { message: 'Consulta removida com sucesso' };

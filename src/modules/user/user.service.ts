@@ -199,4 +199,19 @@ export class UserService {
 
     return true;
   }
+  async findAllAppointmentsbyUser(appointmentId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: appointmentId },
+    });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    const data = await this.prisma.appointment.findMany({
+      where: {
+        userId: appointmentId,
+      },
+    });
+
+    return data;
+  }
 }

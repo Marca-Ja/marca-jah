@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+  // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -94,7 +94,7 @@ model Doctor {
 model Appointment {
   id String @id @unique @default(uuid())
   createdAt   DateTime  @default(now()) @map("created_at")
-  status      Status?   @default(PENDING) @map("aproved_at")
+  status      Status?   @default(PENDING)
   paymentMethod     PaymentMethod? @map("payment_method")
   scheduledAt DateTime  @map("scheduled_at")
   deletedAt   DateTime? @map("deleted_at")

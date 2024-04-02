@@ -105,4 +105,17 @@ export class UserController {
     return this.userservice.findPreference(specialtyID, page, limit);
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Get('appointment/:appointmentId')
+  findAllByUser(@Param('appointmentId') appointmentId: string) {
+    return this.userservice.findAllAppointmentsbyUser(appointmentId);
+  }
+
 }
