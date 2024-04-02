@@ -1,7 +1,7 @@
 ### Variables 
 @apiurl = http://localhost:3000
 @authToken = {{login.response.body.accessToken}}
-
+@doctorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhaW5oYTg1QGdtYWlsLmNvbSIsInJvbGUiOiJEb2N0b3IiLCJpYXQiOjE3MTIwNTk4NzAsImV4cCI6MTcxMjY2NDY3MCwiYXVkIjoidXNlciIsImlzcyI6ImxvZ2luIiwic3ViIjoiMmY1ZTUxZTAtZWM5My00MDJkLTllM2UtMWQ3NjgxYWExODllIn0.Ay-AUDLKfSOYAseMCQJcIUnm5xkXBC5vIC4Q656jXAg
 //AUTH
 
 ### GET auth Google
@@ -102,7 +102,7 @@ Authorization: Bearer {{authToken}}
 ###PUT doctor
 PUT {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 {
    "name":"Ana",
@@ -115,7 +115,7 @@ Authorization: Bearer {{authToken}}
 ###PATCH doctor
 PATCH {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 {
    "name":"Tenali",
@@ -127,7 +127,7 @@ Authorization: Bearer {{authToken}}
 
 ### DELETE doctor
 DELETE {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 //APPOINTMENTS
 
@@ -150,25 +150,33 @@ Authorization: Bearer {{authToken}}
 
 
 ### GET appointments by user
-GET {{apiurl}}/appointment/user/afcf303b-a023-4eed-ad7d-2ba0a93c0d50 HTTP/1.1
+GET {{apiurl}}/user/appointment/afcf303b-a023-4eed-ad7d-2ba0a93c0d50 HTTP/1.1
 Accept-Type: application/json
 Authorization: Bearer {{authToken}}
 
 
 ### GET appointments by doctor
-GET {{apiurl}}/appointment/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
+GET {{apiurl}}/doctor/appointment/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 
 ### GET  all appointments
 GET {{apiurl}}/appointment HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 ### DELETE  appointment by ID
 
 DELETE {{apiurl}}/appointment/3ac73499-17e4-411e-8d9e-f4b8ccfd2b3b HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
+### PUT update status of appoinment
+PUT {{apiurl}}/doctor/appointment/2a81e1d3-c98c-4c55-a2b0-a15e37acfe8d HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{doctorToken}}
+
+{
+"status": "APROVED"
+}
