@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
   Param,
   Put,
   UseGuards,
@@ -20,7 +21,6 @@ import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
 
 @ApiTags('Doctor')
 @Roles(Role.Doctor)
-@UseGuards(GoogleTokenValidation)
 @Controller('doctor')
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
@@ -32,11 +32,13 @@ export class DoctorController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get()
-  findAll() {
+  async findAll() {
     try {
       return this.doctorService.findAll();
     } catch (e) {
-      // throw new error(e.message);
+      throw new InternalServerErrorException(
+        'Ocorreu um problema, mas já estamos resolvendo',
+      );
     }
   }
 
@@ -47,10 +49,11 @@ export class DoctorController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.doctorService.findOne(id);
   }
 
+  @UseGuards(GoogleTokenValidation)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -59,10 +62,12 @@ export class DoctorController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Put(':id')
-  update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
+  async update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
+
     return this.doctorService.update(id, data);
   }
 
+  @UseGuards(GoogleTokenValidation)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -71,7 +76,7 @@ export class DoctorController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.doctorService.remove(id);
   }
 }
