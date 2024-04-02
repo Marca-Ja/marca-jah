@@ -96,11 +96,11 @@ GET {{apiurl}}/doctor HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 ### GET doctor
-GET {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+GET {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 ###PUT doctor
-PUT {{apiurl}}/doctor/b6347f85-ee2a-4dae-8b0e-ba9b69dc709e HTTP/1.1
+PUT {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -108,8 +108,7 @@ Authorization: Bearer {{authToken}}
    "name":"Ana",
    "socialName":"",
    "lastName":"Barreto",
-   "bornedAt":"1985-09-16",
-   ""
+   "bornedAt":"1985-09-16"
 
    }
 
@@ -139,27 +138,27 @@ Authorization: Bearer {{authToken}}
 ### POST appointments
 POST {{apiurl}}/appointment HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
    
    {
-      "doctorId":"6049c5e8-1415-44ce-af89-0a8310ab8615",
-      "userId":"4d3d65c6-c72a-494a-a9e1-1a9490097fc8",
-      "scheduledAt":"2024-03-29T00:50:55.000Z",
+      "doctorId":"2f5e51e0-ec93-402d-9e3e-1d7681aa189e",
+      "userId":"afcf303b-a023-4eed-ad7d-2ba0a93c0d50",
+      "scheduledAt":"2024-04-29T00:50:55.000Z",
       "status":"PENDING",
       "paymentMethod":"CREDIT_CARD"
    }
 
 
 ### GET appointments by user
-GET {{apiurl}}/appointment/user/3877edb7-b584-4fd2-864c-011f30c3ea69 HTTP/1.1
+GET {{apiurl}}/appointment/user/afcf303b-a023-4eed-ad7d-2ba0a93c0d50 HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
 
 
 ### GET appointments by doctor
-GET {{apiurl}}/appointment/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+GET {{apiurl}}/appointment/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
 
 
 ### GET  all appointments
