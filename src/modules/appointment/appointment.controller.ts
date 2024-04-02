@@ -78,8 +78,8 @@ export class AppointmentController {
     return this.appointmentService.findAllAppointmentsbyDoctor(id);
   }
 
-  @Roles(Role.User, Role.Doctor)
-  @UseGuards(AuthGuard, RoleGuard)
+
+  @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
