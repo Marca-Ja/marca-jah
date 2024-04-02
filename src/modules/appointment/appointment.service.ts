@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { PrismaService } from '../../infra/prisma.service';
+import { isWithinInterval, parseISO, getDay } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
@@ -22,6 +23,22 @@ export class AppointmentService {
     });
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
+    }
+    const appointmentDate = data.scheduledAt;
+  console.log(appointmentDate)
+  const dayOfWeek = getDay(appointmentDate);
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    throw new BadRequestException('Agendamentos são permitidos apenas em dias úteis.');
+  }
+
+    const startBusinessHours = new Date(appointmentDate);
+    startBusinessHours.setHours(9, 0, 0, 0); 
+
+    const endBusinessHours = new Date(appointmentDate);
+    endBusinessHours.setHours(18, 0, 0, 0);
+
+    if (!isWithinInterval(appointmentDate, { start: startBusinessHours, end: endBusinessHours })) {
+      throw new BadRequestException('Agendamentos devem ser realizados dentro do horário comercial (9h às 18h).');
     }
 
     return this.prisma.appointment.create({ data });
