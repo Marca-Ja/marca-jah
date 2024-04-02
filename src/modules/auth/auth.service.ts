@@ -30,7 +30,7 @@ export class AuthService {
     }
     const accessToken = this.createToken(userExists);
 
-    return { accessToken };
+    return accessToken ;
   }
 
   createToken(user) {
