@@ -69,10 +69,7 @@ export class AppointmentService {
     if (!appointment) {
       throw new NotFoundException('Consulta não encontrada');
     }
-    await this.prisma.appointment.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    await this.prisma.appointment.delete({ where: { id } });
 
     return { message: 'Consulta removida com sucesso' };
   }
