@@ -3,9 +3,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { getDay, isWithinInterval } from 'date-fns';
-import { PrismaService } from '../../infra/prisma.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
+import { PrismaService } from '../../infra/prisma.service';
+import { isWithinInterval, parseISO, getDay } from 'date-fns';
 
 @Injectable()
 export class AppointmentService {
@@ -29,6 +29,7 @@ export class AppointmentService {
       throw new NotFoundException('Usuário não encontrado');
     }
     const appointmentDate = data.scheduledAt;
+    console.log(appointmentDate);
     const dayOfWeek = getDay(appointmentDate);
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       throw new BadRequestException(
@@ -67,7 +68,7 @@ export class AppointmentService {
     if (!appointment) {
       throw new NotFoundException('Consulta não encontrada');
     }
-    await this.prisma.appointment.delete({
+    await this.prisma.appointment.update({
       where: { id },
       data: { deletedAt: new Date() },
     });

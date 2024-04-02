@@ -65,8 +65,7 @@ export class AppointmentController {
     return this.appointmentService.findAll();
   }
 
-  @Roles(Role.User)
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Consultas de um usuário',
@@ -79,45 +78,8 @@ export class AppointmentController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Get('user/:id')
-  findAllByUser(@Param('id') id: string) {
-    return this.appointmentService.findAllAppointmentsbyUser(id);
-  }
-
-  @Roles(Role.Doctor)
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiBearerAuth('access')
-  @ApiOperation({
-    summary: 'Consultas de um médico',
-    description:
-      'Essa rota retorna todas as consultas designadas a um médico específico',
-  })
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Get('doctor/:id')
-  findAllByDoctor(@Param('id') id: string) {
-    return this.appointmentService.findAllAppointmentsbyDoctor(id);
-  }
-
-  @Roles(Role.User, Role.Doctor)
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiBearerAuth('access')
-  @ApiOperation({
-    summary: 'Remoção de uma consulta',
-    description: 'Essa rota deleta uma consulta específico do banco de dados',
-  })
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete(':appointmentId')
+  remove(@Param('appointmentId') id: string) {
     return this.appointmentService.remove(id);
   }
 }
