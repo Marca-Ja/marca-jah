@@ -41,7 +41,7 @@ export class UpdateDoctorDto {
   @IsNotEmpty()
   bornedAt: string;
 
-  @ApiProperty({ examples: ['Cardiologista', 'Clínico Geral', 'Pediatra'] })
+  @ApiProperty({ examples: ['ONLINE', 'PRESENCIAL', 'ALL'] })
   @IsNotEmpty()
   servicePreference: ServicePreference;
 
