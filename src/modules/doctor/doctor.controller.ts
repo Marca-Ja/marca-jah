@@ -13,11 +13,11 @@ import { error } from 'console';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
 import { responses } from '../../global/docs/schema.docs';
+import { AuthGuard } from '../../guards/auth.guard';
 import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from './doctor.service';
-import { UpdateDoctorDto } from './dto/update-doctor.dto';
-import { AuthGuard } from '../../guards/auth.guard';
 import { UpdateDoctorAppointmentDto } from './dto/update-doctor-appointment.dto';
+import { UpdateDoctorDto } from './dto/update-doctor.dto';
 
 @ApiTags('Doctor')
 @Controller('doctor')
@@ -51,6 +51,7 @@ export class DoctorController {
   findOne(@Param('id') id: string) {
     return this.doctorService.findDoctor(id);
   }
+
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')

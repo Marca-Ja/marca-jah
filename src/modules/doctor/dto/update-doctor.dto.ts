@@ -1,9 +1,9 @@
 import { ServicePreference } from '@prisma/client';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDate,
-  IsDateString,
   IsEnum,
   IsNotEmpty,
   IsOptional,
@@ -15,7 +15,6 @@ import {
   IsWithinLast130Years,
 } from 'src/decorators/validation.decorator';
 import { Role } from '../../../enum/role.enum';
-import { Type } from 'class-transformer';
 
 export class UpdateDoctorDto {
   @ApiProperty({ example: 'Jhon' })
