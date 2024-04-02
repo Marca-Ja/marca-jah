@@ -162,8 +162,8 @@ export class UserController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Get('appointment/:appointmentId')
-  findAllByUser(@Param('appointmentId') appointmentId: string) {
-    return this.userservice.findAllAppointmentsbyUser(appointmentId);
+  @Get('appointment/:userId')
+  findAllByUser(@Param('userId') userId: string) {
+    return this.userservice.findAllAppointmentsbyUser(userId);
   }
 }
