@@ -29,27 +29,8 @@ import { UserService } from './user.service';
 @ApiTags('User')
 @Controller('user')
 @ApiQuery({ name: 'role', enum: Role })
-@Roles(Role.User)
 export class UserController {
   constructor(private readonly userservice: UserService) {}
-
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiBearerAuth('access')
-  @ApiOperation({
-    summary: 'Retorna todos os usuários',
-    description:
-      'Essa rota retorna todos os usuários cadastrados no banco de dados. Só pode ser acessada por um usuário "Admin".',
-  })
-  @ApiResponse(responses.ok)
-  @ApiResponse(responses.badRequest)
-  @ApiResponse(responses.unauthorized)
-  @ApiResponse(responses.forbidden)
-  @ApiResponse(responses.unprocessable)
-  @ApiResponse(responses.internalError)
-  @Get()
-  async list() {
-    return this.userservice.list();
-  }
 
   @ApiOperation({
     summary: 'Cadastro de um usuário',
@@ -66,6 +47,7 @@ export class UserController {
     return this.userservice.create(data);
   }
 
+  @Roles(Role.User)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -84,6 +66,7 @@ export class UserController {
     return this.userservice.update(id, data);
   }
 
+  @Roles(Role.User)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -105,7 +88,8 @@ export class UserController {
     return this.userservice.updatePartial(id, data);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna médicos cadastrados',
@@ -125,7 +109,8 @@ export class UserController {
     return this.userservice.findAll(page, limit);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna médicos cadastrados com uma especilidade específica',
@@ -150,7 +135,8 @@ export class UserController {
     return this.userservice.findPreference(specialtyID, page, limit);
   }
 
-  @UseGuards(AuthGuard)
+  @Roles(Role.User)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna todas as consultas cadastradas do usuário',
@@ -166,5 +152,24 @@ export class UserController {
   @Get('appointment/:userId')
   findAllByUser(@Param('userId') userId: string) {
     return this.userservice.findAllAppointmentsbyUser(userId);
+  }
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna todos os usuários',
+    description:
+      'Essa rota retorna todos os usuários cadastrados no banco de dados. Só pode ser acessada por um usuário "Admin".',
+  })
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Get()
+  async list() {
+    return this.userservice.list();
   }
 }
