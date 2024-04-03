@@ -29,6 +29,7 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Retorna todos os médicos',
