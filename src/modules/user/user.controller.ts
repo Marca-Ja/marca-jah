@@ -27,17 +27,18 @@ import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('User')
-@Roles(Role.User)
 @Controller('user')
+@ApiQuery({ name: 'role', enum: Role })
+@Roles(Role.User)
 export class UserController {
   constructor(private readonly userservice: UserService) {}
 
   @UseGuards(AuthGuard, RoleGuard)
-  @ApiQuery({ name: 'role', enum: Role })
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna todos os usuários',
-    description: 'Essa rota cadastrados no banco de dados',
+    description:
+      'Essa rota retorna todos os usuários cadastrados no banco de dados. Só pode ser acessada por um usuário "Admin".',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
