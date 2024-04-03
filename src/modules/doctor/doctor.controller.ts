@@ -68,7 +68,7 @@ export class DoctorController {
     return this.doctorService.findDoctor(id);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -86,7 +86,8 @@ export class DoctorController {
   update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
     return this.doctorService.update(id, data);
   }
-  @Roles(Role.Doctor)
+
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -104,7 +105,7 @@ export class DoctorController {
     return this.doctorService.remove(id);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -123,7 +124,7 @@ export class DoctorController {
     return this.doctorService.findAllAppointmentsbyDoctor(appointmentId);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({

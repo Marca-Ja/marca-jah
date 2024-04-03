@@ -47,7 +47,7 @@ export class UserController {
     return this.userservice.create(data);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -66,7 +66,7 @@ export class UserController {
     return this.userservice.update(id, data);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -88,7 +88,7 @@ export class UserController {
     return this.userservice.updatePartial(id, data);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -109,7 +109,7 @@ export class UserController {
     return this.userservice.findAll(page, limit);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -135,7 +135,7 @@ export class UserController {
     return this.userservice.findPreference(specialtyID, page, limit);
   }
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
