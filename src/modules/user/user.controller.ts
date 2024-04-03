@@ -32,7 +32,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userservice: UserService) {}
 
-  @ApiOperation({
+ @ApiOperation({
     summary: 'Cadastro de um usuário',
     description: 'Essa rota cria um novo usuário no banco de dados.',
   })
