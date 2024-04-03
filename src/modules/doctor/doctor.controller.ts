@@ -32,7 +32,8 @@ export class DoctorController {
   @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Retorna todos os médicos',
-    description: 'Essa rota lista todos os médicos cadastrados.',
+    description:
+      'Essa rota lista todos os médicos cadastrados no banco de dados.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
