@@ -16,7 +16,7 @@ POST {{apiurl}}/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-   "email":"abbmr@hotmail.com",
+   "email":"MarcaJah@gmail.com",
    "password":"AnazinhaDaDoideira@23"
 }
 
@@ -35,11 +35,11 @@ POST {{apiurl}}/user HTTP/1.1
 Content-Type: application/json
 
 {
-   "name":"Ana",
+   "name":"Marca Já Admin",
    "socialName":"",
    "lastName":"Beatrizete",
    "bornedAt":"1999/06/23",
-   "email":"abbmr@hotmail.com",
+   "email":"MarcaJah@gmail.com",
    "cellphone": "(21)974331945",
    "password":"AnazinhaDaDoideira@23",
    "postalCode": "28940555",
@@ -47,7 +47,8 @@ Content-Type: application/json
    "state": "RS",
    "street": "Redencio Frizzo",
    "maritalState":"SINGLE",
-   "receiveNews": true
+   "receiveNews": true,
+   "role":"Admin"
 }
 
 ### PUT users

@@ -14,6 +14,9 @@ import { AuthLoginDTO } from './DTO/auth-login.dto';
 import { AuthService } from './auth.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { responses } from '../../global/docs/schema.docs';
+import { RoleGuard } from '../../guards/role.guard';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../enum/role.enum';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -70,7 +73,9 @@ export class AuthController {
     return this.authService.login(email, password);
   }
 
-  @UseGuards(AuthGuard)
+
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({
     summary: 'Verificação de token',
     description:

@@ -29,10 +29,12 @@ import { UpdateDoctorDto } from './dto/update-doctor.dto';
 export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
+  @Roles(Role.Admin)
   @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Retorna todos os médicos',
-    description: 'Essa rota lista todos os médicos cadastrados.',
+    description:
+      'Essa rota lista todos os médicos cadastrados no banco de dados.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -66,7 +68,7 @@ export class DoctorController {
     return this.doctorService.findDoctor(id);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -84,7 +86,8 @@ export class DoctorController {
   update(@Body() data: UpdateDoctorDto, @Param('id') id: string) {
     return this.doctorService.update(id, data);
   }
-  @Roles(Role.Doctor)
+
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
@@ -104,7 +107,7 @@ export class DoctorController {
     return this.doctorService.remove(id);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -123,7 +126,7 @@ export class DoctorController {
     return this.doctorService.findAllAppointmentsbyDoctor(appointmentId);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
