@@ -86,8 +86,6 @@ export class DoctorController {
   }
   @Roles(Role.Doctor)
   @UseGuards(AuthGuard, RoleGuard)
-  @Roles(Role.Doctor)
-  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Remoção de um médico',
