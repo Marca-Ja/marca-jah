@@ -6,9 +6,11 @@ import { PrismaModule } from '../../infra/prisma.module';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
+import { HttpModule } from '@nestjs/axios';
+import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, HttpModule],
   controllers: [DoctorController],
   providers: [
     DoctorService,
@@ -16,6 +18,7 @@ import { UserService } from '../user/user.service';
     AuthService,
     JwtService,
     UserService,
+    GoogleTokenValidation
   ],
 })
 export class DoctorModule {}

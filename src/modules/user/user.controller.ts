@@ -9,7 +9,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Roles } from '../../decorators/roles.decorator';
 import { Role } from '../../enum/role.enum';
 import { responses } from '../../global/docs/schema.docs';
@@ -27,7 +33,12 @@ export class UserController {
   constructor(private readonly userservice: UserService) {}
 
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiQuery({ name: 'role', enum: Role })
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna todos os usuários',
+    description: 'Essa rota cadastrados no banco de dados',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -39,6 +50,10 @@ export class UserController {
     return this.userservice.list();
   }
 
+  @ApiOperation({
+    summary: 'Cadastro de um usuário',
+    description: 'Essa rota cria um novo usuário no banco de dados.',
+  })
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -52,6 +67,11 @@ export class UserController {
 
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Atualização do cadastro',
+    description:
+      'Essa rota atualiza os dados do usuário cadastrado autenticado.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -65,6 +85,11 @@ export class UserController {
 
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Atualização parcial do cadastro',
+    description:
+      'Essa rota atualiza alguns dados do usuário cadastrado autenticado.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -81,6 +106,13 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna médicos cadastrados',
+    description:
+      'Essa rota retorna todos os médicos cadastrados no banco de dados.',
+  })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -94,6 +126,14 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna médicos cadastrados com uma especilidade específica',
+    description:
+      'Essa rota retorna todos os médicos cadastrados com uma especilidade específica no banco de dados.',
+  })
+  @ApiQuery({ name: 'specialtyID', type: String, required: false })
+  @ApiQuery({ name: 'page', type: Number, required: false })
+  @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -101,21 +141,29 @@ export class UserController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get('doctors/:specialtyID')
-  findPreference(@Param('specialtyID') specialtyID: string, @Query('page') page: number, @Query('limit') limit: number) {
+  findPreference(
+    @Param('specialtyID') specialtyID: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
     return this.userservice.findPreference(specialtyID, page, limit);
   }
 
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Retorna todas as consultas cadastradas do usuário',
+    description:
+      'Essa rota retorna todas as consultas cadastrados por um usuário no banco de dados.',
+  })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Get('appointment/:appointmentId')
-  findAllByUser(@Param('appointmentId') appointmentId: string) {
-    return this.userservice.findAllAppointmentsbyUser(appointmentId);
+  @Get('appointment/:userId')
+  findAllByUser(@Param('userId') userId: string) {
+    return this.userservice.findAllAppointmentsbyUser(userId);
   }
-
 }

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '../../infra/prisma.service';
 import { UpdateDoctorDto } from './dto/update-doctor.dto';
 import { UpdateDoctorAppointmentDto } from './dto/update-doctor-appointment.dto';
@@ -19,6 +23,10 @@ export class DoctorService {
 
   async update(id: string, data: UpdateDoctorDto) {
     await this.exists(id);
+
+    if (data.hasOwnProperty('email')) {
+      throw new BadRequestException('Email não pode ser alterado');
+    }
 
     return this.prisma.doctor.update({
       data,

@@ -1,5 +1,5 @@
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
   // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -30,6 +30,12 @@ enum PaymentMethod {
   CASH
 }
 
+enum ServicePreference {
+  ONLINE
+  PRESENCIAL
+  ALL
+}
+
 model User {
   id           String        @id @unique @default(uuid())
   name         String
@@ -42,7 +48,7 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     String?     @map("borned_at")
+  bornedAt     String?       @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
@@ -68,12 +74,6 @@ model Specialty {
   @@map("specialties")
 }
 
-enum ServicePreference {
-  ONLINE
-  PRESENCIAL
-  ALL
-}
-
 model Doctor {
   id                String            @id @unique @default(uuid())
   email             String            @unique
@@ -92,15 +92,14 @@ model Doctor {
 }
 
 model Appointment {
-  id String @id @unique @default(uuid())
-  createdAt   DateTime  @default(now()) @map("created_at")
-  status      Status?   @default(PENDING)
-  paymentMethod     PaymentMethod? @map("payment_method")
-  scheduledAt DateTime  @map("scheduled_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id            String         @id @unique @default(uuid())
+  createdAt     DateTime       @default(now()) @map("created_at")
+  status        Status?        @default(PENDING)
+  paymentMethod PaymentMethod? @map("payment_method")
+  scheduledAt   DateTime       @map("scheduled_at")
 
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @map("user_id")
