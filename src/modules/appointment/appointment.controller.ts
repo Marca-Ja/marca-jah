@@ -27,7 +27,7 @@ import { Roles } from '../../decorators/roles.decorator';
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
@@ -46,7 +46,7 @@ export class AppointmentController {
     return this.appointmentService.create(data);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
