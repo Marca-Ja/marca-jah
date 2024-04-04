@@ -8,6 +8,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -74,14 +75,13 @@ export class AuthService {
       if (user) {
         return this.createToken(user);
       }
-
       if (!(await bcrypt.compare(password, user.password))) {
         throw new UnauthorizedException('E-mail ou senha inválido(s)');
       }
 
       throw new UnauthorizedException('E-mail ou senha inválido(s)');
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException('Usuário não cadastrado');
     }
   }
 
