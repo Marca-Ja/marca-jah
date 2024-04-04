@@ -29,7 +29,7 @@ export class CreateAppointmentDto {
   @IsEnum(PaymentMethod)
   paymentMethod: PaymentMethod;
 
-  @ApiProperty()
+  @ApiProperty({ example: '2024-06-10T00:50:55.000Z' })
   @IsDate()
   @isFutureDate({ message: 'A data de agendamento deve ser uma data futura' })
   @Type(() => Date)

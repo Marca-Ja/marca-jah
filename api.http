@@ -16,7 +16,7 @@ POST {{apiurl}}/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-   "email":"abbmr@hotmail.com",
+   "email":"MarcaJah@gmail.com",
    "password":"AnazinhaDaDoideira@23"
 }
 
@@ -35,11 +35,11 @@ POST {{apiurl}}/user HTTP/1.1
 Content-Type: application/json
 
 {
-   "name":"Ana",
+   "name":"Marca Já Admin",
    "socialName":"",
    "lastName":"Beatrizete",
    "bornedAt":"1999/06/23",
-   "email":"abbmr@hotmail.com",
+   "email":"MarcaJah@gmail.com",
    "cellphone": "(21)974331945",
    "password":"AnazinhaDaDoideira@23",
    "postalCode": "28940555",
@@ -47,8 +47,10 @@ Content-Type: application/json
    "state": "RS",
    "street": "Redencio Frizzo",
    "maritalState":"SINGLE",
-   "receiveNews": true
+   "receiveNews": true,
+   "role":"Admin"
 }
+
 ### PUT users
 PUT {{apiurl}}/user/998572d0-a1c7-4eda-b080-561c2c08df40 HTTP/1.1
 Authorization: Bearer {{authToken}}
@@ -82,9 +84,6 @@ Content-Type: application/json
    "bornedAt":"1999/06/23"
 }
 
-### GET users/doctors
-GET {{apiurl}}/user/doctors HTTP/1.1
-Authorization: Bearer {{authToken}}
 
 ### GET users/doctors/:specialtyID
 GET {{apiurl}}/user/doctors/1 HTTP/1.1
@@ -133,6 +132,7 @@ DELETE {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 //APPOINTMENTS
+
 ### GET appointments
 GET {{apiurl}}/appointment HTTP/1.1
 Authorization: Bearer {{authToken}}
@@ -152,27 +152,25 @@ Authorization: Bearer {{{{authToken}}
 
 
 ### GET appointments by user
-
 GET {{apiurl}}/appointment/user/3877edb7-b584-4fd2-864c-011f30c3ea69 HTTP/1.1
 Accept-Type: application/json
 Authorization: Bearer {{{{authToken}}
 
 
 ### GET appointments by doctor
-
 GET {{apiurl}}/appointment/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
 Accept-Type: application/json
 Authorization: Bearer {{{{authToken}}
 
 
 ### GET  all appointments
-
 GET {{apiurl}}/appointment HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
 
 ### DELETE  appointment by ID
 
 DELETE {{apiurl}}/appointment/3ac73499-17e4-411e-8d9e-f4b8ccfd2b3b HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
+

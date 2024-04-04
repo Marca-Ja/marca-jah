@@ -115,7 +115,7 @@ export class UserService {
     }
   }
 
-  async findAll(page:number, limit:number) {
+  async findAll(page: number, limit: number) {
     if (page && limit) {
       const skip = (page - 1) * limit;
       return this.prisma.doctor.findMany({
@@ -125,13 +125,13 @@ export class UserService {
           lastName: true,
           servicePreference: true,
           university: true,
-          specialtyId: true
+          specialtyId: true,
         },
-        take: limit, 
-        skip
+        take: limit,
+        skip,
       });
     }
-    
+
     return this.prisma.doctor.findMany({
       select: {
         id: true,
@@ -139,12 +139,12 @@ export class UserService {
         lastName: true,
         servicePreference: true,
         university: true,
-        specialtyId: true
-      }
+        specialtyId: true,
+      },
     });
   }
 
-  async findPreference(specialtyID: string, page:number, limit:number) {
+  async findPreference(specialtyID: string, page: number, limit: number) {
     if (specialtyID) {
       if (page && limit) {
         const skip = (page - 1) * limit;
@@ -156,10 +156,10 @@ export class UserService {
             lastName: true,
             servicePreference: true,
             university: true,
-            specialtyId: true
+            specialtyId: true,
           },
-          take: limit, 
-          skip
+          take: limit,
+          skip,
         });
       }
       return this.prisma.doctor.findMany({
@@ -170,11 +170,11 @@ export class UserService {
           lastName: true,
           servicePreference: true,
           university: true,
-          specialtyId: true
-        }
+          specialtyId: true,
+        },
       });
-    } 
-}
+    }
+  }
 
   async validateUser(data: any) {
     if (isUUID(data)) {
@@ -198,5 +198,20 @@ export class UserService {
     }
 
     return true;
+  }
+  async findAllAppointmentsbyUser(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    const data = await this.prisma.appointment.findMany({
+      where: {
+        userId,
+      },
+    });
+
+    return data;
   }
 }
