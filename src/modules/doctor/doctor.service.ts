@@ -62,7 +62,7 @@ export class DoctorService {
     status: UpdateDoctorAppointmentDto,
   ) {
     if (!status) {
-      throw new Error('Status DTO is undefined or not provided');
+      throw new Error('O status do DTO é indefinido ou não foi fornecido');
     }
 
     const appointment = await this.prisma.appointment.findFirst({
