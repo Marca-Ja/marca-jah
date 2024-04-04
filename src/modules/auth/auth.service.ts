@@ -8,7 +8,6 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 import { JwtService } from '@nestjs/jwt';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -21,17 +20,27 @@ export class AuthService {
   ) {}
 
   async googleLogin(req: any) {
-    if (!req.user) {
-      throw new BadRequestException('Unauthenticated');
-    }
+    try {
+      if (!req.user) {
+        throw new BadRequestException('Usuário do Google não encontrado.');
+      }
 
-    const userExists = await this.findDoctorByEmail(req.user.email);
-    if (!userExists) {
-      return this.registerDoctor(req.user);
-    }
-    const accessToken = this.createToken(userExists);
+      if (!req.user.firstName || !req.user.lastName) {
+        throw new BadRequestException(
+          'Nome e/ou sobrenome do usuário do Google não encontrados.',
+        );
+      }
 
-    return accessToken;
+      const userExists = await this.findDoctorByEmail(req.user.email);
+      if (!userExists) {
+        return this.registerDoctor(req.user);
+      }
+      const accessToken = this.createToken(userExists);
+
+      return accessToken;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   createToken(user) {
