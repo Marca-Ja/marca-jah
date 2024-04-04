@@ -96,7 +96,7 @@ export class AuthService {
 
   async registerDoctor(req) {
     if (!req) {
-      return 'No user from google';
+      return 'Nenhum usuário encontrado';
     }
     const { email, firstName, lastName } = req;
     try {
