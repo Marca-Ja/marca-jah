@@ -54,7 +54,6 @@ model User {
   role         String        @default("User")
   createdAt    DateTime?     @default(now()) @map("created_at")
   updatedAt    DateTime?     @updatedAt @map("update_at")
-  deletedAt    DateTime?     @map("delete_at")
 
   specialties  Specialty[]
   appointments Appointment[]
@@ -63,10 +62,9 @@ model User {
 }
 
 model Specialty {
-  id        String    @id @unique @default(uuid())
+  id        String   @id @unique @default(uuid())
   specialty String
-  createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("delete_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
   users   User[]
   doctors Doctor[]
