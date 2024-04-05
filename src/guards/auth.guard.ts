@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
+    const params = request.params;
     const authorization = request.headers;
 
     try {
@@ -26,15 +27,12 @@ export class AuthGuard implements CanActivate {
       );
 
       request.tokenPayload = data;
+
       if (data.role === 'Doctor') {
         request.user = await this.doctorService.findDoctor(data.sub);
       }
 
-      if (data.role === 'User') {
-        request.user = await this.userService.listUser(data.sub);
-      }
-
-      if (data.role === 'Admin') {
+      if (data.role === 'User' || data.role === 'Admin') {
         request.user = await this.userService.listUser(data.sub);
       }
 
