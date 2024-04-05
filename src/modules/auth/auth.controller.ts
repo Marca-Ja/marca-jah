@@ -78,10 +78,10 @@ export class AuthController {
     return this.authService.login(email, password);
   }
 
-
   @ApiOperation({
     summary: 'Verifica Token SMS',
-    description: 'Essa rota verifica se o código informado pelo usuário é valido.',
+    description:
+      'Essa rota verifica se o código informado pelo usuário é valido.',
   })
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)

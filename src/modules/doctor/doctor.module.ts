@@ -21,7 +21,7 @@ import { TwilioService } from 'src/infra/twilio/twilio.service';
     JwtService,
     UserService,
     GoogleTokenValidation,
-    TwilioService
+    TwilioService,
   ],
 })
 export class DoctorModule {}

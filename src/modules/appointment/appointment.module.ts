@@ -19,7 +19,7 @@ import { TwilioService } from 'src/infra/twilio/twilio.service';
     JwtService,
     UserService,
     DoctorService,
-    TwilioService
+    TwilioService,
   ],
 })
 export class AppointmentModule {}
