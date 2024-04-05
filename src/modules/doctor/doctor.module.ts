@@ -8,9 +8,11 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import { HttpModule } from '@nestjs/axios';
 import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
+import { TwilioModule } from 'src/infra/twilio/twilio.module';
+import { TwilioService } from 'src/infra/twilio/twilio.service';
 
 @Module({
-  imports: [PrismaModule, HttpModule],
+  imports: [PrismaModule, HttpModule, TwilioModule],
   controllers: [DoctorController],
   providers: [
     DoctorService,
@@ -18,7 +20,8 @@ import { GoogleTokenValidation } from 'src/guards/googleTokenValidation.guard';
     AuthService,
     JwtService,
     UserService,
-    GoogleTokenValidation
+    GoogleTokenValidation,
+    TwilioService
   ],
 })
 export class DoctorModule {}
