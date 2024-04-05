@@ -6,17 +6,22 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Roles } from '../../decorators/roles.decorator';
 import { User } from '../../decorators/user.decorator';
+import { Role } from '../../enum/role.enum';
+import { responses } from '../../global/docs/schema.docs';
 import { AuthGuard } from '../../guards/auth.guard';
 import { GoogleOAuthGuard } from '../../guards/google-oauth.guard';
+import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from '../doctor/doctor.service';
 import { AuthLoginDTO } from './DTO/auth-login.dto';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { responses } from '../../global/docs/schema.docs';
-import { RoleGuard } from '../../guards/role.guard';
-import { Roles } from '../../decorators/roles.decorator';
-import { Role } from '../../enum/role.enum';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -73,13 +78,13 @@ export class AuthController {
     return this.authService.login(email, password);
   }
 
-
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Verificação de token',
     description:
-      'Essa rota verifica e retorna informações do médico autenticado.',
+      'Essa rota verifica e retorna informações de um usuário ou médico autenticado.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -89,8 +94,6 @@ export class AuthController {
   @ApiResponse(responses.internalError)
   @Post('token')
   async verifyToken(@User() user: any) {
-    return {
-      user,
-    };
+    return { user };
   }
 }
