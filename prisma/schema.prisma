@@ -38,7 +38,11 @@ enum ServicePreference {
 
 model User {
   id           String        @id @unique @default(uuid())
+  id           String        @id @unique @default(uuid())
   name         String
+  socialName   String?
+  lastName     String
+  email        String        @unique
   socialName   String?
   lastName     String
   email        String        @unique
@@ -79,7 +83,17 @@ model Doctor {
   lastName          String
   university        String?
   bornedAt          String?           @map("borned_at")
+  email             String            @unique
+  firstName         String
+  lastName          String
+  university        String?
+  bornedAt          String?           @map("borned_at")
   servicePreference ServicePreference @default(ALL) @map("service_preference")
+  createdAt         DateTime          @default(now())
+  specialty         Specialty?        @relation(fields: [specialtyId], references: [id])
+  specialtyId       String?
+  Appointment       Appointment[]
+  role              String            @default("Doctor")
   createdAt         DateTime          @default(now())
   specialty         Specialty?        @relation(fields: [specialtyId], references: [id])
   specialtyId       String?
