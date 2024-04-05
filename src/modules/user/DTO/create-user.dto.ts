@@ -24,7 +24,7 @@ export class CreateUserDTO {
   @MinLength(3)
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '' })
   @IsOptional()
   @IsString({ message: "A propriedade 'socialName' deve ser uma String" })
   socialName: string;

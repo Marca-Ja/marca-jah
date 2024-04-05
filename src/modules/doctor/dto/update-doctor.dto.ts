@@ -6,6 +6,7 @@ import {
   IsDate,
   IsEnum,
   IsNotEmpty,
+  IsNumberString,
   IsOptional,
   IsString,
   MinLength,
@@ -40,6 +41,16 @@ export class UpdateDoctorDto {
   @IsWithinLast130Years({ message: 'Data de nascimento inválida' })
   @IsNotEmpty()
   bornedAt: string;
+
+  @ApiProperty({ example: '1' })
+  @IsNumberString(
+    {},
+    {
+      message:
+        "O campo 'specialtyId' é inválido. Utilize apenas números dentro da string",
+    },
+  )
+  specialtyId: string;
 
   @ApiProperty({ examples: ['ONLINE', 'PRESENCIAL', 'ALL'] })
   @IsNotEmpty()

@@ -121,9 +121,9 @@ export class DoctorController {
   @ApiResponse(responses.forbidden)
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
-  @Get('appointment/:appointmentId')
-  findAllByDoctor(@Param('appointmentId') appointmentId: string) {
-    return this.doctorService.findAllAppointmentsbyDoctor(appointmentId);
+  @Get('appointment/:doctorId')
+  findAllByDoctor(@Param('doctorId') doctorId: string) {
+    return this.doctorService.findAllAppointmentsbyDoctor(doctorId);
   }
 
   @Roles(Role.Doctor, Role.Admin)

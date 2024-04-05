@@ -22,17 +22,27 @@ export class AuthService {
   ) {}
 
   async googleLogin(req: any) {
-    if (!req.user) {
-      throw new BadRequestException('Unauthenticated');
-    }
+    try {
+      if (!req.user) {
+        throw new BadRequestException('Usuário do Google não encontrado.');
+      }
 
-    const userExists = await this.findDoctorByEmail(req.user.email);
-    if (!userExists) {
-      return this.registerDoctor(req.user);
-    }
-    const accessToken = this.createToken(userExists);
+      if (!req.user.firstName || !req.user.lastName) {
+        throw new BadRequestException(
+          'Nome e/ou sobrenome do usuário do Google não encontrados.',
+        );
+      }
 
-    return accessToken;
+      const userExists = await this.findDoctorByEmail(req.user.email);
+      if (!userExists) {
+        return this.registerDoctor(req.user);
+      }
+      const accessToken = this.createToken(userExists);
+
+      return accessToken;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   createToken(user) {
@@ -76,20 +86,19 @@ export class AuthService {
       if (user) {
         return this.twilioService.sendVerificationSMS(user.cellphone)
       }
-
       if (!(await bcrypt.compare(password, user.password))) {
         throw new UnauthorizedException('E-mail ou senha inválido(s)');
       }
 
       throw new UnauthorizedException('E-mail ou senha inválido(s)');
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException('Usuário não cadastrado');
     }
   }
 
   async registerDoctor(req) {
     if (!req) {
-      return 'No user from google';
+      return 'Nenhum usuário encontrado';
     }
     const { email, firstName, lastName } = req;
     try {

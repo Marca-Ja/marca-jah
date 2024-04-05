@@ -28,11 +28,10 @@ import { UserService } from './user.service';
 
 @ApiTags('User')
 @Controller('user')
-@ApiQuery({ name: 'role', enum: Role })
 export class UserController {
   constructor(private readonly userservice: UserService) {}
 
- @ApiOperation({
+  @ApiOperation({
     summary: 'Cadastro de um usuário',
     description: 'Essa rota cria um novo usuário no banco de dados.',
   })

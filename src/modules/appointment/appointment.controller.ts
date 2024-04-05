@@ -27,13 +27,13 @@ import { Roles } from '../../decorators/roles.decorator';
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) {}
 
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Cadastro de uma consulta',
     description:
-      'Essa rota cria uma consulta para um usuário. Ela precisa ser aceita ou negada por um médico.',
+      'Essa rota cria uma consulta para um usuário. Elas são criadas com o status "PENDENTE".',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -46,13 +46,12 @@ export class AppointmentController {
     return this.appointmentService.create(data);
   }
 
-  @Roles(Role.Doctor)
+  @Roles(Role.Doctor, Role.Admin)
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna todos os pedidos de consultas de um médico',
-    description:
-      'Essa rota lista todas as consultas feitas por usuários para um médico as serem aceitas ou negadas.',
+    description: 'Essa rota lista todas as consultas feitas por usuários.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -68,9 +67,8 @@ export class AppointmentController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
-    summary: 'Consultas de um usuário',
-    description:
-      'Essa rota retorna todas as consultas de um usuário específico.',
+    summary: 'Remoção de consultas de um usuário',
+    description: 'Essa rota deleta uma consulta específica.',
   })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
