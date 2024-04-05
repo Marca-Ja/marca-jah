@@ -8,6 +8,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { TwilioService } from 'src/infra/twilio/twilio.service';
 
 @Injectable()
 export class AuthService {
@@ -17,20 +18,31 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
+    private readonly twilioService: TwilioService,
   ) {}
 
   async googleLogin(req: any) {
-    if (!req.user) {
-      throw new BadRequestException('Unauthenticated');
-    }
+    try {
+      if (!req.user) {
+        throw new BadRequestException('Usuário do Google não encontrado.');
+      }
 
-    const userExists = await this.findDoctorByEmail(req.user.email);
-    if (!userExists) {
-      return this.registerDoctor(req.user);
-    }
-    const accessToken = this.createToken(userExists);
+      if (!req.user.firstName || !req.user.lastName) {
+        throw new BadRequestException(
+          'Nome e/ou sobrenome do usuário do Google não encontrados.',
+        );
+      }
 
-    return accessToken ;
+      const userExists = await this.findDoctorByEmail(req.user.email);
+      if (!userExists) {
+        return this.registerDoctor(req.user);
+      }
+      const accessToken = this.createToken(userExists);
+
+      return accessToken;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   createToken(user) {
@@ -72,22 +84,21 @@ export class AuthService {
         },
       });
       if (user) {
-        return this.createToken(user);
+        return this.twilioService.sendVerificationSMS(user.cellphone);
       }
-
       if (!(await bcrypt.compare(password, user.password))) {
         throw new UnauthorizedException('E-mail ou senha inválido(s)');
       }
 
       throw new UnauthorizedException('E-mail ou senha inválido(s)');
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException('Usuário não cadastrado');
     }
   }
 
   async registerDoctor(req) {
     if (!req) {
-      return 'No user from google';
+      return 'Nenhum usuário encontrado';
     }
     const { email, firstName, lastName } = req;
     try {
@@ -115,5 +126,26 @@ export class AuthService {
     }
 
     return doctor;
+  }
+
+  async validateLoginAttempt(cellphone: string, code: string) {
+    try {
+      const validate = await this.twilioService.checkVerificationCode(
+        cellphone,
+        code,
+      );
+      const user = await this.prismaService.user.findFirst({
+        where: {
+          cellphone,
+        },
+      });
+
+      if (validate.status === 'approved') {
+        return this.createToken(user);
+      }
+      throw new UnauthorizedException('Token inválido');
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }

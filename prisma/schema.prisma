@@ -1,5 +1,5 @@
 generator client {
-  provider      = "prisma-client-js"
+  provider = "prisma-client-js"
   // binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -30,9 +30,19 @@ enum PaymentMethod {
   CASH
 }
 
+enum ServicePreference {
+  ONLINE
+  PRESENCIAL
+  ALL
+}
+
 model User {
   id           String        @id @unique @default(uuid())
+  id           String        @id @unique @default(uuid())
   name         String
+  socialName   String?
+  lastName     String
+  email        String        @unique
   socialName   String?
   lastName     String
   email        String        @unique
@@ -42,13 +52,12 @@ model User {
   city         String?
   state        String?
   street       String?
-  bornedAt     String?     @map("borned_at")
+  bornedAt     String?       @map("borned_at")
   maritalState MaritalState? @map("marital_state")
   receiveNews  Boolean?      @default(true) @map("receive_news")
   role         String        @default("User")
   createdAt    DateTime?     @default(now()) @map("created_at")
   updatedAt    DateTime?     @updatedAt @map("update_at")
-  deletedAt    DateTime?     @map("delete_at")
 
   specialties  Specialty[]
   appointments Appointment[]
@@ -57,10 +66,9 @@ model User {
 }
 
 model Specialty {
-  id        String    @id @unique @default(uuid())
+  id        String   @id @unique @default(uuid())
   specialty String
-  createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("delete_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
   users   User[]
   doctors Doctor[]
@@ -68,14 +76,13 @@ model Specialty {
   @@map("specialties")
 }
 
-enum ServicePreference {
-  ONLINE
-  PRESENCIAL
-  ALL
-}
-
 model Doctor {
   id                String            @id @unique @default(uuid())
+  email             String            @unique
+  firstName         String
+  lastName          String
+  university        String?
+  bornedAt          String?           @map("borned_at")
   email             String            @unique
   firstName         String
   lastName          String
@@ -87,20 +94,24 @@ model Doctor {
   specialtyId       String?
   Appointment       Appointment[]
   role              String            @default("Doctor")
+  createdAt         DateTime          @default(now())
+  specialty         Specialty?        @relation(fields: [specialtyId], references: [id])
+  specialtyId       String?
+  Appointment       Appointment[]
+  role              String            @default("Doctor")
 
   @@map("doctors")
 }
 
 model Appointment {
-  id String @id @unique @default(uuid())
-  createdAt   DateTime  @default(now()) @map("created_at")
-  status      Status?   @default(PENDING)
-  paymentMethod     PaymentMethod? @map("payment_method")
-  scheduledAt DateTime  @map("scheduled_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id            String         @id @unique @default(uuid())
+  createdAt     DateTime       @default(now()) @map("created_at")
+  status        Status?        @default(PENDING)
+  paymentMethod PaymentMethod? @map("payment_method")
+  scheduledAt   DateTime       @map("scheduled_at")
 
-  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   doctorId String @map("doctor_id")
+  doctor   Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @map("user_id")

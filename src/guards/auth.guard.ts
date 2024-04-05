@@ -33,6 +33,11 @@ export class AuthGuard implements CanActivate {
       if (data.role === 'User') {
         request.user = await this.userService.listUser(data.sub);
       }
+
+      if (data.role === 'Admin') {
+        request.user = await this.userService.listUser(data.sub);
+      }
+
       return true;
     } catch (error) {
       throw new UnauthorizedException(error);
