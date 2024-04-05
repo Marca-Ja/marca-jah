@@ -8,6 +8,7 @@ import {
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../../infra/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { TwilioService } from 'src/infra/twilio/twilio.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,
+    private readonly twilioService: TwilioService,
   ) {}
 
   async googleLogin(req: any) {
@@ -63,7 +65,7 @@ export class AuthService {
       throw new UnauthorizedException('Token inválido');
     }
   }
-
+  
   async login(email: string, password: string) {
     try {
       const user = await this.prismaService.user.findFirst({
@@ -72,7 +74,7 @@ export class AuthService {
         },
       });
       if (user) {
-        return this.createToken(user);
+        return this.twilioService.sendVerificationSMS(user.cellphone)
       }
 
       if (!(await bcrypt.compare(password, user.password))) {
@@ -115,5 +117,24 @@ export class AuthService {
     }
 
     return doctor;
+  }
+
+  async validateLoginAttempt(cellphone:string, code:string) {
+    try {
+    const validate = await this.twilioService.checkVerificationCode(cellphone, code);
+    const user = await this.prismaService.user.findFirst({
+      where: {
+        cellphone
+      },
+    })
+
+    if (validate.status === "approved") {
+      return this.createToken(user)
+    }
+    throw new UnauthorizedException('Token inválido');
+
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 }
