@@ -1,7 +1,7 @@
 ### Variables 
 @apiurl = http://localhost:3000
-@authToken = {{validate-login.response.body.accessToken}}
-
+@authToken = {{validateLogin.response.body.accessToken}}
+@doctorToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZpY29kaW5kYWlAZ21haWwuY29tIiwicm9sZSI6IkRvY3RvciIsImlhdCI6MTcxMjM0OTI5NiwiZXhwIjoxNzEyOTU0MDk2LCJhdWQiOiJ1c2VyIiwiaXNzIjoibG9naW4iLCJzdWIiOiJkZWI3NDhjMi01ZTllLTQyNzYtYmY5Zi0wYTU2MWIyOTZhZTMifQ.EJsWI7jM4ALi3dE-Y-B5RgwMq6itA1Zi079L6uMiJ4I"
 //AUTH
 
 ### GET auth Google
@@ -20,13 +20,13 @@ Content-Type: application/json
 }
 
 ### POST validateLoginAttempt
-# @name validate-login
+# @name validateLogin
 POST {{apiurl}}/auth/validate-login HTTP/1.1
 Content-Type: application/json
 
 {
    "cellphone": "(21)974331945",
-   "code": "935938"
+   "code": "603937"
 }
 
 ### POST verify token
@@ -106,25 +106,23 @@ GET {{apiurl}}/doctor HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 ### GET doctor
-GET {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+GET {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 ###PUT doctor
-PUT {{apiurl}}/doctor/b6347f85-ee2a-4dae-8b0e-ba9b69dc709e HTTP/1.1
+PUT {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
 
 {
-   "name":"Ana",
-   "socialName":"",
+   "firstName":"Ana",
    "lastName":"Barreto",
-   "bornedAt":"1985-09-16",
-   ""
-
+   "university":"UFMS",
+   "specialtyId": "ginecologista",
    }
 
 ###PATCH doctor
-PATCH {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+PATCH {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
@@ -137,45 +135,50 @@ Authorization: Bearer {{authToken}}
    }
 
 ### DELETE doctor
-DELETE {{apiurl}}/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+DELETE {{apiurl}}/doctor/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Authorization: Bearer {{authToken}}
 
 //APPOINTMENTS
 
-### GET appointments
-GET {{apiurl}}/appointment HTTP/1.1
-Authorization: Bearer {{authToken}}
 
 ### POST appointments
-POST {{apiurl}}/appointment HTTP/1.1
+POST {{apiurl}}/user/appointment HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
    
    {
-      "doctorId":"6049c5e8-1415-44ce-af89-0a8310ab8615",
-      "userId":"4d3d65c6-c72a-494a-a9e1-1a9490097fc8",
-      "scheduledAt":"2024-03-29T00:50:55.000Z",
+      "doctorId":"2f5e51e0-ec93-402d-9e3e-1d7681aa189e",
+      "userId":"0e0268dc-f122-4e43-b295-a06d086c5222",
+      "scheduledAt":"2024-04-26T13:50:55.000Z",
       "status":"PENDING",
       "paymentMethod":"CREDIT_CARD"
    }
 
 
 ### GET appointments by user
-GET {{apiurl}}/appointment/user/3877edb7-b584-4fd2-864c-011f30c3ea69 HTTP/1.1
+GET {{apiurl}}/user/appointment/0e0268dc-f122-4e43-b295-a06d086c5222 HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{authToken}}
 
 
 ### GET appointments by doctor
-GET {{apiurl}}/appointment/doctor/6049c5e8-1415-44ce-af89-0a8310ab8615 HTTP/1.1
+GET {{apiurl}}/doctor/appointment/2f5e51e0-ec93-402d-9e3e-1d7681aa189e HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{{{authToken}}
+Authorization: Bearer {{doctorToken}}
 
-
-### GET  all appointments
-GET {{apiurl}}/appointment HTTP/1.1
+### GET appointments
+GET {{apiurl}}/doctor/appointment/ HTTP/1.1
 Accept-Type: application/json
-Authorization: Bearer {{authToken}}
+Authorization: Bearer {{doctorToken}}
+
+### PUT appointments - atualiza status da consulta
+PUT {{apiurl}}/doctor/appointment/021a4d98-2f0f-4276-92fd-b53c0772dce6 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{doctorToken}}
+
+{
+   "status": "APROVED"
+}
 
 ### DELETE  appointment by ID
 
