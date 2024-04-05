@@ -9,10 +9,13 @@ import { PrismaService } from '../../infra/prisma.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AppointmentModule } from '../appointment/appointment.module';
+import { TwilioService } from 'src/infra/twilio/twilio.service';
+import { TwilioModule } from 'src/infra/twilio/twilio.module';
 
 @Module({
   imports: [
     PassportModule,
+    TwilioModule,
     PrismaModule,
     forwardRef(() => DoctorModule),
     forwardRef(() => UserModule),
@@ -20,7 +23,7 @@ import { AppointmentModule } from '../appointment/appointment.module';
     JwtModule.register({ secret: process.env.JWT_SECRET }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, DoctorService, PrismaService],
+  providers: [AuthService, DoctorService, PrismaService, TwilioService],
   exports: [AuthService],
 })
 export class AuthModule {}
