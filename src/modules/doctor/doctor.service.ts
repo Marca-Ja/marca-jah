@@ -11,7 +11,15 @@ import { UpdateDoctorAppointmentDto } from './dto/update-doctor-appointment.dto'
 export class DoctorService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll( page: string, limit: string) {
+    if (page && limit) {
+      const skip = (parseInt(page) - 1) * parseInt(limit);
+      return await this.prisma.doctor.findMany({
+        take: parseInt(limit),
+        skip,
+      });
+    }
+
     return this.prisma.doctor.findMany();
   }
 
@@ -26,6 +34,7 @@ export class DoctorService {
   async update(id: string, data: UpdateDoctorDto) {
     await this.exists(id);
 
+
     if (data.hasOwnProperty('email')) {
       throw new BadRequestException('Email não pode ser alterado');
     }
@@ -37,7 +46,9 @@ export class DoctorService {
   }
 
   async remove(id: string) {
-    return this.prisma.doctor.delete({ where: { id } });
+    await this.exists(id);
+    await this.prisma.doctor.delete({ where: { id } });
+    return ('Médico removido com sucesso')
   }
 
   async exists(id: string) {
@@ -46,21 +57,33 @@ export class DoctorService {
     }
   }
 
-  async findAllAppointmentsbyDoctor(doctorId: string) {
+  async findAllAppointmentsbyDoctor(doctorId: string, page: string, limit: string) {
     await this.exists(doctorId);
 
+    if (page && limit) {
+      const skip = (parseInt(page) - 1) * parseInt(limit);
+      return await this.prisma.appointment.findMany({
+        where: {
+          doctorId,
+        },
+        take: parseInt(limit),
+        skip,
+      });
+    }
+    
     const data = await this.prisma.appointment.findMany({
       where: {
         doctorId,
       },
     });
-
+    
     return data;
   }
   async updateAppointment(
     appointmentId: string,
     status: UpdateDoctorAppointmentDto,
   ) {
+
     if (!status) {
       throw new Error('O status do DTO é indefinido ou não foi fornecido');
     }
@@ -81,4 +104,5 @@ export class DoctorService {
       updatedAppointment,
     };
   }
+
 }
