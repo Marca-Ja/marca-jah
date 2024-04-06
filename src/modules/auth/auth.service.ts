@@ -75,7 +75,7 @@ export class AuthService {
       throw new UnauthorizedException('Token inválido');
     }
   }
-  
+
   async login(email: string, password: string) {
     try {
       const user = await this.prismaService.user.findFirst({
@@ -84,8 +84,8 @@ export class AuthService {
         },
       });
       if (user) {
-        this.twilioService.sendVerificationSMS(user.cellphone)
-        return ('Código enviado por SMS.')
+        this.twilioService.sendVerificationSMS(user.cellphone);
+        return 'Código enviado por SMS.';
       }
       if (!(await bcrypt.compare(password, user.password))) {
         throw new UnauthorizedException('E-mail ou senha inválido(s)');
@@ -129,20 +129,22 @@ export class AuthService {
     return doctor;
   }
 
-  async validateLoginAttempt(cellphone:string, code:string) {
+  async validateLoginAttempt(cellphone: string, code: string) {
     try {
-    const validate = await this.twilioService.checkVerificationCode(cellphone, code);
-    const user = await this.prismaService.user.findFirst({
-      where: {
-        cellphone
-      },
-    })
+      const validate = await this.twilioService.checkVerificationCode(
+        cellphone,
+        code,
+      );
+      const user = await this.prismaService.user.findFirst({
+        where: {
+          cellphone,
+        },
+      });
 
-    if (validate.status === "approved") {
-      return this.createToken(user)
-    }
-    throw new UnauthorizedException('Token inválido');
-
+      if (validate.status === 'approved') {
+        return this.createToken(user);
+      }
+      throw new UnauthorizedException('Token inválido');
     } catch (error) {
       throw new BadRequestException(error.message);
     }

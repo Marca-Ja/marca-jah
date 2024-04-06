@@ -45,7 +45,7 @@ export class AuthController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get()
-  async googleAuth(@Request() req) {}
+  async googleAuth() {}
 
   @UseGuards(GoogleOAuthGuard)
   @ApiOperation({
@@ -79,10 +79,10 @@ export class AuthController {
     return this.authService.login(email, password);
   }
 
-
   @ApiOperation({
     summary: 'Verifica Token SMS',
-    description: 'Essa rota verifica se o código informado pelo usuário é valido.',
+    description:
+      'Essa rota verifica se o código informado pelo usuário é valido.',
   })
   @ApiResponse(responses.created)
   @ApiResponse(responses.badRequest)
@@ -91,7 +91,9 @@ export class AuthController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Post('validate-login')
-  async validateLoginAttempt(@Body() { cellphone, code }: AuthValidateLoginDTO) {
+  async validateLoginAttempt(
+    @Body() { cellphone, code }: AuthValidateLoginDTO,
+  ) {
     return this.authService.validateLoginAttempt(cellphone, code);
   }
 

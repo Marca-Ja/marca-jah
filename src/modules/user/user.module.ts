@@ -11,7 +11,13 @@ import { TwilioService } from 'src/infra/twilio/twilio.service';
 @Module({
   imports: [PrismaModule, TwilioModule],
   controllers: [UserController],
-  providers: [UserService, AuthService, JwtService, DoctorService, TwilioService],
+  providers: [
+    UserService,
+    AuthService,
+    JwtService,
+    DoctorService,
+    TwilioService,
+  ],
   exports: [UserService],
 })
 export class UserModule {}

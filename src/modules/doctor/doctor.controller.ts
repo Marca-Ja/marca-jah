@@ -61,9 +61,8 @@ export class DoctorController {
   @ApiOperation({
     summary: 'Retorna médico específico',
     description:
-    'Essa rota retorna um médico específico com base no seu ID (identificação única).',
+      'Essa rota retorna um médico específico com base no seu ID (identificação única).',
   })
-
   @ApiBearerAuth('access')
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
@@ -131,8 +130,16 @@ export class DoctorController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get('appointment/:doctorId')
-  findAllByDoctor(@Param('doctorId') doctorId: string, @Query('page') page: string, @Query('limit') limit: string) {
-    return this.doctorService.findAllAppointmentsbyDoctor(doctorId, page, limit);
+  findAllByDoctor(
+    @Param('doctorId') doctorId: string,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+  ) {
+    return this.doctorService.findAllAppointmentsbyDoctor(
+      doctorId,
+      page,
+      limit,
+    );
   }
 
   @Roles(Role.Doctor, Role.Admin)
@@ -156,5 +163,4 @@ export class DoctorController {
   ) {
     return this.doctorService.updateAppointment(appointmentId, status);
   }
-
 }

@@ -56,7 +56,7 @@ export class UpdateDoctorDto {
   @IsNotEmpty()
   servicePreference: ServicePreference;
 
-  @ApiProperty({example: 'Doctor'})
+  @ApiProperty({ example: 'Doctor' })
   @IsOptional()
   @IsEnum(Role)
   role: string;
