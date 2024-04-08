@@ -5,9 +5,6 @@ WORKDIR /app
 
 COPY . .
 COPY  ./.env-docker ./.env
-
-COPY . .
-COPY  ./.env-docker ./.env
 COPY package*.json ./
 
 RUN npm i --quiet --no-optional --no-fund --loglevel=error

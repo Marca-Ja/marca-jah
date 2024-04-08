@@ -38,6 +38,7 @@ enum ServicePreference {
 
 model User {
   id           String        @id @unique @default(uuid())
+  name         String
   socialName   String?
   lastName     String
   email        String        @unique
