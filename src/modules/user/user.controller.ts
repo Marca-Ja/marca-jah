@@ -98,8 +98,8 @@ export class UserController {
     description:
       'Essa rota retorna todos os médicos cadastrados no banco de dados.',
   })
-  @ApiQuery({ name: 'page', type: Number, required: false })
-  @ApiQuery({ name: 'limit', type: Number, required: false })
+  @ApiQuery({ name: 'page', type: String, required: false })
+  @ApiQuery({ name: 'limit', type: String, required: false })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -107,7 +107,7 @@ export class UserController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get('doctors')
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
+  findAll(@Query('page') page: string, @Query('limit') limit: string) {
     return this.userservice.findAll(page, limit);
   }
 
@@ -119,9 +119,8 @@ export class UserController {
     description:
       'Essa rota retorna todos os médicos cadastrados com uma especilidade específica no banco de dados.',
   })
-  @ApiQuery({ name: 'specialtyID', type: String, required: false })
-  @ApiQuery({ name: 'page', type: Number, required: false })
-  @ApiQuery({ name: 'limit', type: Number, required: false })
+  @ApiQuery({ name: 'page', type: String, required: false })
+  @ApiQuery({ name: 'limit', type: String, required: false })
   @ApiResponse(responses.ok)
   @ApiResponse(responses.badRequest)
   @ApiResponse(responses.unauthorized)
@@ -131,8 +130,8 @@ export class UserController {
   @Get('doctors/:specialtyID')
   findPreference(
     @Param('specialtyID') specialtyID: string,
-    @Query('page') page: number,
-    @Query('limit') limit: number,
+    @Query('page') page: string,
+    @Query('limit') limit: string,
   ) {
     return this.userservice.findPreference(specialtyID, page, limit);
   }

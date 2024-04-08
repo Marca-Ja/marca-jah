@@ -118,9 +118,9 @@ export class UserService {
     }
   }
 
-  async findAll(page: number, limit: number) {
+  async findAll(page: string, limit: string) {
     if (page && limit) {
-      const skip = (page - 1) * limit;
+      const skip = (parseInt(page) - 1) * parseInt(limit);
       return this.prisma.doctor.findMany({
         select: {
           id: true,
@@ -130,7 +130,7 @@ export class UserService {
           university: true,
           specialtyId: true,
         },
-        take: limit,
+        take: parseInt(limit),
         skip,
       });
     }
@@ -147,10 +147,10 @@ export class UserService {
     });
   }
 
-  async findPreference(specialtyID: string, page: number, limit: number) {
+  async findPreference(specialtyID: string, page: string, limit: string) {
     if (specialtyID) {
       if (page && limit) {
-        const skip = (page - 1) * limit;
+        const skip = (parseInt(page) - 1) * parseInt(limit);
         return this.prisma.doctor.findMany({
           where: { specialtyId: specialtyID },
           select: {
@@ -161,7 +161,7 @@ export class UserService {
             university: true,
             specialtyId: true,
           },
-          take: limit,
+          take: parseInt(limit),
           skip,
         });
       }
