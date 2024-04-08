@@ -29,19 +29,21 @@ export class IdGuard implements CanActivate {
       const userId = params.userId || params.id || params.doctorId;
       if (!userId) {
         throw new UnauthorizedException(
-          'User identifier parameter not found in the request.',
+          'Parâmetro identificador (Id) do usuário não encontrado na solicitação.',
         );
       }
 
       if (data.sub !== userId) {
         throw new UnauthorizedException(
-          'Access denied: User can only access their own profile.',
+          'Acesso Negado: O usuário só pode acessar seu próprio perfil.',
         );
       }
 
       return true;
     } catch (error) {
-      throw new UnauthorizedException(error.message || 'Unauthorized access.');
+      throw new UnauthorizedException(
+        error.message || 'Acesso não autorizado.',
+      );
     }
   }
 }
