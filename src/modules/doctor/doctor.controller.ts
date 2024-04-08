@@ -33,7 +33,7 @@ export class DoctorController {
   constructor(private readonly doctorService: DoctorService) {}
 
   @Roles(Role.Admin)
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiQuery({ name: 'page', type: Number, required: false })
   @ApiQuery({ name: 'limit', type: Number, required: false })
   @ApiBearerAuth('access')
