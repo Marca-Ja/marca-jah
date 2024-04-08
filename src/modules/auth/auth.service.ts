@@ -84,7 +84,8 @@ export class AuthService {
         },
       });
       if (user) {
-        return this.twilioService.sendVerificationSMS(user.cellphone);
+        this.twilioService.sendVerificationSMS(user.cellphone);
+        return 'Código enviado por SMS.';
       }
       if (!(await bcrypt.compare(password, user.password))) {
         throw new UnauthorizedException('E-mail ou senha inválido(s)');

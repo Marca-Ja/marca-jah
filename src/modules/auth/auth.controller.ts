@@ -22,6 +22,7 @@ import { RoleGuard } from '../../guards/role.guard';
 import { DoctorService } from '../doctor/doctor.service';
 import { AuthLoginDTO } from './DTO/auth-login.dto';
 import { AuthService } from './auth.service';
+import { AuthValidateLoginDTO } from './DTO/auth-validate-login.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -44,7 +45,7 @@ export class AuthController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Get()
-  async googleAuth(@Request() req) {}
+  async googleAuth() {}
 
   @UseGuards(GoogleOAuthGuard)
   @ApiOperation({
@@ -90,7 +91,9 @@ export class AuthController {
   @ApiResponse(responses.unprocessable)
   @ApiResponse(responses.internalError)
   @Post('validate-login')
-  async validateLoginAttempt(@Body() { cellphone, code }) {
+  async validateLoginAttempt(
+    @Body() { cellphone, code }: AuthValidateLoginDTO,
+  ) {
     return this.authService.validateLoginAttempt(cellphone, code);
   }
 

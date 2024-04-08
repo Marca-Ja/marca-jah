@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -25,6 +26,8 @@ import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
 import { UserService } from './user.service';
+import { CreateAppointmentDto } from './DTO/create-appointment.dto';
+import { IdGuard } from 'src/guards/id.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -47,7 +50,7 @@ export class UserController {
   }
 
   @Roles(Role.User, Role.Admin)
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard, RoleGuard, IdGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Atualização do cadastro',
@@ -66,7 +69,7 @@ export class UserController {
   }
 
   @Roles(Role.User, Role.Admin)
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard, RoleGuard, IdGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Atualização parcial do cadastro',
@@ -135,7 +138,7 @@ export class UserController {
   }
 
   @Roles(Role.User, Role.Admin)
-  @UseGuards(AuthGuard, RoleGuard)
+  @UseGuards(AuthGuard, RoleGuard, IdGuard)
   @ApiBearerAuth('access')
   @ApiOperation({
     summary: 'Retorna todas as consultas cadastradas do usuário',
@@ -170,5 +173,40 @@ export class UserController {
   @Get()
   async list() {
     return this.userservice.list();
+  }
+
+  @Roles(Role.User, Role.Admin)
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Cadastro de uma consulta',
+    description:
+      'Essa rota cria uma consulta para um usuário. Elas são criadas com o status "PENDENTE".',
+  })
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Post('/appointment')
+  createAppointment(@Body() data: CreateAppointmentDto) {
+    return this.userservice.createAppointment(data);
+  }
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('access')
+  @ApiOperation({
+    summary: 'Remoção de consultas de um usuário',
+    description: 'Essa rota deleta uma consulta específica.',
+  })
+  @ApiResponse(responses.ok)
+  @ApiResponse(responses.badRequest)
+  @ApiResponse(responses.unauthorized)
+  @ApiResponse(responses.forbidden)
+  @ApiResponse(responses.unprocessable)
+  @ApiResponse(responses.internalError)
+  @Delete('appointment/:appointmentId')
+  remove(@Param('appointmentId') id: string) {
+    return this.userservice.removeAppointment(id);
   }
 }

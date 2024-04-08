@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -10,6 +11,8 @@ import { PrismaService } from 'src/infra/prisma.service';
 import { CreateUserDTO } from './DTO/create-user.dto';
 import { UpdatePatchUserDTO } from './DTO/update-patch-user.dto';
 import { UpdatePutUserDTO } from './DTO/update-put-user.dto';
+import { getDay, isWithinInterval } from 'date-fns';
+import { CreateAppointmentDto } from './DTO/create-appointment.dto';
 
 @Injectable()
 export class UserService {
@@ -213,5 +216,61 @@ export class UserService {
     });
 
     return data;
+  }
+  async createAppointment(data: CreateAppointmentDto) {
+    const doctor = await this.prisma.doctor.findUnique({
+      where: {
+        id: data.doctorId,
+      },
+    });
+    if (!doctor) {
+      throw new NotFoundException('Médico não encontrado');
+    }
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: data.userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    const appointmentDate = data.scheduledAt;
+    const dayOfWeek = getDay(appointmentDate);
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      throw new BadRequestException(
+        'Agendamentos são permitidos apenas em dias úteis.',
+      );
+    }
+
+    const startBusinessHours = new Date(appointmentDate);
+    startBusinessHours.setHours(9, 0, 0, 0);
+
+    const endBusinessHours = new Date(appointmentDate);
+    endBusinessHours.setHours(18, 0, 0, 0);
+
+    if (
+      !isWithinInterval(appointmentDate, {
+        start: startBusinessHours,
+        end: endBusinessHours,
+      })
+    ) {
+      throw new BadRequestException(
+        'Agendamentos devem ser realizados dentro do horário comercial (9h às 18h).',
+      );
+    }
+
+    return this.prisma.appointment.create({ data });
+  }
+  async removeAppointment(id: string) {
+    const appointment = await this.prisma.appointment.findUnique({
+      where: { id },
+    });
+
+    if (!appointment) {
+      throw new NotFoundException('Consulta não encontrada');
+    }
+    await this.prisma.appointment.delete({ where: { id } });
+
+    return { message: 'Consulta removida com sucesso' };
   }
 }

@@ -1,18 +1,14 @@
-import {
-  registerDecorator,
-  ValidationOptions,
-  ValidationArguments,
-} from 'class-validator';
+import { registerDecorator, ValidationOptions } from 'class-validator';
 
 export function IsOlderThan18(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'isOlderThan18',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           const currentDate = new Date();
           const minDate = new Date(
             currentDate.getFullYear() - 18,
@@ -35,20 +31,22 @@ export function IsOlderThan18(validationOptions?: ValidationOptions) {
 }
 
 export function IsWithinLast130Years(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       name: 'isWithinLast130Years',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           const currentDate = new Date();
 
           const currentYear = currentDate.getFullYear();
           const minYear = currentYear - 130;
 
-          return value.getFullYear() >= minYear && value.getFullYear() <= currentYear;
+          return (
+            value.getFullYear() >= minYear && value.getFullYear() <= currentYear
+          );
         },
       },
     });

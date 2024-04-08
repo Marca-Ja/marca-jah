@@ -52,11 +52,11 @@ export class UpdateDoctorDto {
   )
   specialtyId: string;
 
-  @ApiProperty({ examples: ['ONLINE', 'PRESENCIAL', 'ALL'] })
+  @ApiProperty({ example: 'ONLINE' })
   @IsNotEmpty()
   servicePreference: ServicePreference;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Doctor' })
   @IsOptional()
   @IsEnum(Role)
   role: string;
