@@ -4,6 +4,7 @@
   <a href="#about">About</a> •
   <a href="#run">Run the project</a> •
   <a href="#colab">Collaborators</a> •
+<a href="#deploy">Deployed version</a> •
   <a href="#license">License</a>
 </p>
 
@@ -18,6 +19,8 @@ API for booking medical appointments, with endpoints that allow the customer to 
   
 ## 🏃‍♀️ Run the project
 </p>
+
+💡 try the deployed version: https://marca-ja.onrender.com/api
 
 ```bash
 
@@ -71,6 +74,15 @@ This is the dream team that made it all happen: 💜
   </tr>
 </table>
 
+<p id="deploy">
+
+## 🚀 Deployed Application
+<p/>
+
+  Visit our project and try it for yourself:
+</p>
+
+📄[Api](https://marca-ja.onrender.com/api) --> Opens the swagger documentation of our api project
 
 <p id="license">
 	
